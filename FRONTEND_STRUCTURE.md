@@ -7,7 +7,6 @@ src/
 ├─ app/                        # Next.js App Router (routes) — thin wrappers only
 │  ├─ (frontend)/              # Hash-routed SPA lives here (storefront on /)
 │  │  ├─ page.tsx              # RSC entry: session + getStoreData() → StoreEntry
-│  │  ├─ actions.ts            # Deprecated compat shim → feature backends (placeOrder/sendMessage/subscribe)
 │  │  ├─ auth-actions.ts       # Customer auth Server Actions
 │  │  ├─ layout.tsx            # Metadata, GA, custom-code injection
 │  │  ├─ not-found.tsx
@@ -51,7 +50,7 @@ src/
 │  ├─ wishlist/                # WishlistContext, WishlistPage, WishlistButton
 │  ├─ content/                 # Static pages (About, Contact, Faq, Lookbook, ShippingReturns, SizeGuide, NotFound) + content.ts
 │  ├─ auth/                    # admin-auth.ts, app-auth.ts, google-oauth.ts, jwt-secret.ts, passwords.ts,
-│  │                           #   admin-model.ts (Admin collection), auth-utils.ts, utils.ts,
+│  │                           #   admin-model.ts (Admin collection), utils.ts,
 │  │                           #   AuthContext.tsx, AuthPages.tsx + backend.ts (customer auth actions)
 │  ├─ media/                   # model.ts, ImageUploadField, prepare-image-upload.ts,
 │  │                           #   upload.ts + serve-file.ts (plain modules; app/api routes wrap them)
@@ -85,7 +84,7 @@ src/
 
 RSC `page.tsx` → `getStoreData()` (Mongo via `connectDB`, cache tag `store-data`) → `StoreData` props → `StoreEntry`/`hydrateStore()` → hash-routed SPA (`features/shell/App.tsx` PAGES map). Admin console under `manage/(private)` reads/writes through the Server Actions in `src/features/<feature>/backend.ts`; each mutation calls `revalidatePath` for the affected `/manage/*` segment and `refreshStorefront()` (a `revalidateTag("store-data")` wrapper from `features/admin/actions-shared.ts`) for shared content.
 
-Admin server actions: one `backend.ts` per feature (`products`, `categories`, `orders`, `customers`, `colors`, `messages`, `subscribers`, `site-settings`, `delivery`, `dashboard`), all sharing `src/features/admin/actions-shared.ts` — a plain module with **no** `"use server"` directive holding `ensureDB`, `toObjectId`, `slugify`, cache tags, `Lean*` types and `PaginatedResult`. Only the `backend.ts` modules export async actions. The storefront actions (`placeOrder`, `getMyOrders`) live in `features/orders/backend.ts` next to the admin order actions; `sendMessage` / `subscribe` similarly live in their feature backends. `app/(frontend)/actions.ts` is a deprecated compatibility shim re-exporting them.
+Admin server actions: one `backend.ts` per feature (`products`, `categories`, `orders`, `customers`, `colors`, `messages`, `subscribers`, `site-settings`, `delivery`, `dashboard`), all sharing `src/features/admin/actions-shared.ts` — a plain module with **no** `"use server"` directive holding `ensureDB`, `toObjectId`, `slugify`, cache tags, `Lean*` types and `PaginatedResult`. Only the `backend.ts` modules export async actions. The storefront actions (`placeOrder`, `getMyOrders`) live in `features/orders/backend.ts` next to the admin order actions; `sendMessage` / `subscribe` similarly live in their feature backends.
 
 Admin image uploads go through `features/media/ImageUploadField` → `POST /api/media/upload` → `media` collection → served at `/api/media/file/<id>`. There is **no** `uploadMedia` server action anymore (it was dead code with no callers).
 
