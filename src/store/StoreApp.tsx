@@ -11,7 +11,6 @@ import '@fontsource/space-grotesk/latin-700.css'
 import App from '@/store/App'
 import type { User } from '@/store/context/AuthContext'
 import { type StoreData, hydrateStore } from '@/store/data/settings'
-import { mockStoreData } from '@/store/data/mock-data'
 import '@/store/styles/global.css'
 
 export default function StoreApp({ data, user }: { data: StoreData | null; user: User | null }) {
@@ -22,19 +21,8 @@ export default function StoreApp({ data, user }: { data: StoreData | null; user:
   const hydrated = useRef(false)
   if (!hydrated.current) {
     hydrated.current = true
-    // Use CMS data if it has actual content, otherwise load mock data in development
-    const hasCmsData = Boolean(data && data.products.length > 0)
-    const storeData: StoreData | null =
-      hasCmsData && data
-        ? data
-        : process.env.NODE_ENV === 'development'
-          ? (mockStoreData as unknown as StoreData)
-          : null
-    if (storeData) {
-      hydrateStore(storeData)
-      if (!hasCmsData && process.env.NODE_ENV === 'development') {
-        console.log('[Dev] Loaded mock data for testing')
-      }
+    if (data && data.products.length > 0) {
+      hydrateStore(data)
     }
   }
 

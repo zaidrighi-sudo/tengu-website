@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getCustomers, getLifetimeDeliveredSpendForUsers } from "@/lib/admin/actions"
+import { getCustomers, getLifetimeDeliveredSpendForUsers } from "@/lib/admin/actions/customers"
 import { formatCurrency, formatDate } from "@/lib/admin/helpers"
 import "@/store/styles/global.css"
 import "../admin.css"

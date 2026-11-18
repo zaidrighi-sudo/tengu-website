@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getOrder } from "@/lib/admin/actions"
+import { getOrder } from "@/lib/admin/actions/orders"
 import { formatDate, getStatusLabel } from "@/lib/admin/helpers"
 import { OrderEditForm } from "@/components/admin/OrderEditForm"
 import "@/store/styles/global.css"

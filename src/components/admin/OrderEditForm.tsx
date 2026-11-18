@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { updateOrder, type LeanOrder } from "@/lib/admin/actions"
+import { updateOrder } from "@/lib/admin/actions/orders"
+import type { LeanOrder } from "@/lib/admin/actions/_shared"
 import { formatCurrency, formatDate, getStatusLabel } from "@/lib/admin/helpers"
 
 /**

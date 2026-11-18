@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { createColor } from "@/lib/admin/actions"
+import { createColor } from "@/lib/admin/actions/colors"
 import { redirect } from "next/navigation"
 import "@/store/styles/global.css"
 import "../../admin.css"

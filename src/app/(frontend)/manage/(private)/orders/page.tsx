@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getOrders, updateOrderStatus } from "@/lib/admin/actions"
+import { getOrders, updateOrderStatus } from "@/lib/admin/actions/orders"
 import { formatCurrency, formatDate, getStatusLabel } from "@/lib/admin/helpers"
 import "@/store/styles/global.css"
 import "../admin.css"

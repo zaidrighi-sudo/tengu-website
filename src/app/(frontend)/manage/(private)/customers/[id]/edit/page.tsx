@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { getCustomer, updateCustomer, getLifetimeDeliveredSpendForUsers, getDeliverySettings } from "@/lib/admin/actions"
+import { getCustomer, updateCustomer, getLifetimeDeliveredSpendForUsers } from "@/lib/admin/actions/customers"
+import { getDeliverySettings } from "@/lib/admin/actions/delivery"
 import { notFound, redirect } from "next/navigation"
 import { formatCurrency, formatDate } from "@/lib/admin/helpers"
 import "@/store/styles/global.css"

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getSubscribers, deleteSubscriber } from "@/lib/admin/actions"
+import { getSubscribers, deleteSubscriber } from "@/lib/admin/actions/subscribers"
 import { formatDate } from "@/lib/admin/helpers"
 import "@/store/styles/global.css"
 import "../admin.css"

@@ -60,15 +60,11 @@ export function ImageUploadField({
     setError("")
     setUploading(true)
     try {
-      console.log('[ImageUpload] File selected:', { name: file.name, type: file.type, size: file.size })
-
       // Optionally resize large photos client-side before upload.
       const prepared = await prepareImageUpload(file)
-      console.log('[ImageUpload] Prepared file:', { name: prepared.file.name, type: prepared.file.type, size: prepared.file.size })
 
       // Convert to base64 data URL for reliable server-side storage.
       const base64 = await fileToBase64(prepared.file)
-      console.log('[ImageUpload] Base64 length:', base64.length)
 
       const res = await fetch("/api/media/upload", {
         method: "POST",
@@ -80,15 +76,12 @@ export function ImageUploadField({
         }),
       })
 
-      console.log('[ImageUpload] Server response status:', res.status)
-
       if (!res.ok) {
         const err = await res.json().catch(() => ({}))
         throw new Error(err?.error ?? "Upload failed. Please try again.")
       }
 
       const uploaded = await res.json()
-      console.log('[ImageUpload] Upload success:', { id: uploaded.id, url: uploaded.url })
       apply(uploaded.id, uploaded.url)
     } catch (cause) {
       console.error('[ImageUpload] Error:', cause)

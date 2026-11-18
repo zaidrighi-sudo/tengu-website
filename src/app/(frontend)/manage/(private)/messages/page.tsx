@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getMessages, updateMessageStatus } from "@/lib/admin/actions"
+import { getMessages, updateMessageStatus } from "@/lib/admin/actions/messages"
 import { formatDate } from "@/lib/admin/helpers"
 import "@/store/styles/global.css"
 import "../admin.css"

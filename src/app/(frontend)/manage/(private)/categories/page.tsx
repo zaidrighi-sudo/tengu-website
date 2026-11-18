@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getCategoriesPaginated, deleteCategory } from "@/lib/admin/actions"
+import { getCategoriesPaginated, deleteCategory } from "@/lib/admin/actions/categories"
 import "@/store/styles/global.css"
 import "../admin.css"
 

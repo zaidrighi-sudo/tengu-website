@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getSiteSettings, updateSiteSettings } from "@/lib/admin/actions"
+import { getSiteSettings, updateSiteSettings } from "@/lib/admin/actions/site-settings"
 import { ImageUploadField } from "@/components/admin/ImageUploadField"
 import "@/store/styles/global.css"
 import "@/app/(frontend)/manage/(private)/admin.css"

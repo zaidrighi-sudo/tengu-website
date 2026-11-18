@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { createCategory } from "@/lib/admin/actions"
+import { createCategory } from "@/lib/admin/actions/categories"
 import { ImageUploadField } from "@/components/admin/ImageUploadField"
 import { redirect } from "next/navigation"
 import "@/store/styles/global.css"

@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { getDeliverySettings, updateDeliverySettings, type LeanDeliverySettings } from "@/lib/admin/actions"
+import { getDeliverySettings, updateDeliverySettings } from "@/lib/admin/actions/delivery"
+import type { LeanDeliverySettings } from "@/lib/admin/actions/_shared"
 import { resolveZoneFees } from "@/lib/delivery"
 import { COMMUNES_BY_CODE, DEFAULT_WILAYAS, communeKey } from "@/lib/algeria-data"
 import "@/store/styles/global.css"

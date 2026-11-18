@@ -3,7 +3,7 @@ import { unstable_cache } from 'next/cache'
 import type { StoreData } from '@/store/data/settings'
 import type { ColorName, Fit, Product as ProductType, ProductStatus, Size } from '@/store/data/products'
 import { connectDB, Product, Category, Color, SiteSettings, DeliverySettings, Media, type IMedia } from '@/lib/mongodb/models'
-import type { LeanSiteSettings, LeanDeliverySettings } from '@/lib/admin/actions'
+import type { LeanSiteSettings, LeanDeliverySettings } from '@/lib/admin/actions/_shared'
 import { resolveCommuneFees } from '@/lib/delivery'
 
 const STORE_TAG = 'store-data'

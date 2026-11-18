@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { getProducts, getCategories, deleteProduct } from "@/lib/admin/actions"
+import { getProducts, deleteProduct } from "@/lib/admin/actions/products"
+import { getCategories } from "@/lib/admin/actions/categories"
 import { formatCurrency } from "@/lib/admin/helpers"
 import "@/store/styles/global.css"
 import "../admin.css"

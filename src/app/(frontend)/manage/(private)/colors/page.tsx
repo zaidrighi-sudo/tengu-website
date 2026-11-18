@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getColorsPaginated, deleteColor } from "@/lib/admin/actions"
+import { getColorsPaginated, deleteColor } from "@/lib/admin/actions/colors"
 import "@/store/styles/global.css"
 import "../admin.css"
 

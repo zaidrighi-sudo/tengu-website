@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { getCategory, updateCategory, type LeanCategory } from "@/lib/admin/actions"
+import { getCategory, updateCategory } from "@/lib/admin/actions/categories"
+import type { LeanCategory } from "@/lib/admin/actions/_shared"
 import { ImageUploadField } from "@/components/admin/ImageUploadField"
 import { notFound, redirect } from "next/navigation"
 import "@/store/styles/global.css"

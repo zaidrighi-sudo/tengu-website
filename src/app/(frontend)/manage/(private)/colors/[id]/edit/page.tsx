@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getColor, updateColor } from "@/lib/admin/actions"
+import { getColor, updateColor } from "@/lib/admin/actions/colors"
 import { notFound, redirect } from "next/navigation"
 import "@/store/styles/global.css"
 import "../../../admin.css"

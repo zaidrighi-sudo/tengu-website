@@ -1,5 +1,7 @@
 import Link from "next/link"
-import { getCategories, getColors, createProduct } from "@/lib/admin/actions"
+import { getCategories } from "@/lib/admin/actions/categories"
+import { getColors } from "@/lib/admin/actions/colors"
+import { createProduct } from "@/lib/admin/actions/products"
 import { ProductForm } from "@/components/admin/ProductForm"
 import { redirect } from "next/navigation"
 import "@/store/styles/global.css"
