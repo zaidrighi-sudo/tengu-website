@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 export interface IAdmin extends Document {
   email: string
@@ -20,4 +21,4 @@ const AdminSchema = new Schema<IAdmin>({
   timestamps: true,
 })
 
-export const Admin = mongoose.models.Admin || mongoose.model<IAdmin>('Admin', AdminSchema, 'admins')
+export const Admin = resolveModel('Admin', AdminSchema, 'admins')

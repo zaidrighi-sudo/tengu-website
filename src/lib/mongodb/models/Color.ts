@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 export interface IColor extends Document {
   name: string
@@ -20,4 +21,4 @@ const ColorSchema = new Schema<IColor>({
 
 ColorSchema.index({ sortOrder: 1 })
 
-export const Color = mongoose.models.Color || mongoose.model<IColor>('Color', ColorSchema, 'colors')
+export const Color = resolveModel('Color', ColorSchema, 'colors')

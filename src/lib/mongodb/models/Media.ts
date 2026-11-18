@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 export interface IMedia extends Document {
   filename: string
@@ -28,4 +29,4 @@ const MediaSchema = new Schema<IMedia>({
   timestamps: true,
 })
 
-export const Media = mongoose.models.Media || mongoose.model<IMedia>('Media', MediaSchema, 'media')
+export const Media = resolveModel('Media', MediaSchema, 'media')

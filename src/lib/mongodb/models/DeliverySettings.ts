@@ -55,4 +55,4 @@ const DeliverySettingsSchema = new Schema<IDeliverySettings>({
   timestamps: true,
 })
 
-export const DeliverySettings = resolveModel('DeliverySettings', DeliverySettingsSchema, 'delivery-settings', ['loyaltyFreeDeliveryThreshold'])
+export const DeliverySettings = resolveModel('DeliverySettings', DeliverySettingsSchema, 'delivery-settings')

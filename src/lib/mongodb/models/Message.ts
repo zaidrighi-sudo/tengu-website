@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 export interface IMessage extends Document {
   name: string
@@ -29,4 +30,4 @@ const MessageSchema = new Schema<IMessage>({
 
 MessageSchema.index({ createdAt: -1 })
 
-export const Message = mongoose.models.Message || mongoose.model<IMessage>('Message', MessageSchema, 'messages')
+export const Message = resolveModel('Message', MessageSchema, 'messages')

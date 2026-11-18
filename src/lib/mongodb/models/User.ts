@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 export interface IAddress {
   label: string
@@ -60,4 +61,4 @@ const UserSchema = new Schema<IUser>({
 
 UserSchema.index({ createdAt: -1 })
 
-export const User = mongoose.models.User || mongoose.model<IUser>('User', UserSchema, 'users')
+export const User = resolveModel('User', UserSchema, 'users')

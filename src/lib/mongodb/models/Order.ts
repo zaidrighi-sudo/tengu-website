@@ -99,4 +99,4 @@ const OrderSchema = new Schema<IOrder>({
 OrderSchema.index({ createdAt: -1 })
 OrderSchema.index({ status: 1, createdAt: -1 })
 
-export const Order = resolveModel('Order', OrderSchema, 'orders', ['loyaltyFreeDelivery'])
+export const Order = resolveModel('Order', OrderSchema, 'orders')

@@ -120,5 +120,5 @@ pnpm restore backups/<timestamp> --confirm tengu   # destructive restore into DA
 
 ## Caveats
 
-- Every Mongoose model previously used the stale-cache pattern (`mongoose.models.X || model(...)`), which silently dropped writes after a schema change under a long-running dev server. `DeliverySettings` and `Order` now go through `_model-cache.resolveModel`, which re-registers the model when the cached schema is missing paths. Roll the same treatment out to the remaining models before making future schema changes.
+- A long-running dev `node_modules` cache holding a Mongoose model compiled before a schema change silently drops writes to new paths ("succeeds" but the field never lands). Every model now goes through `_model-cache.resolveModel`, which walks the current schema (recursing into nested subdocs and document arrays) and re-registers the cached model when any current path is missing. No per-model path lists to maintain — schema edits automatically trigger re-registration.
 - Admin pages are only verifiable in a browser/session; static checks (tsc, import resolution, orphan scan) are the agent-side safety net.

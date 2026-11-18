@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 export interface ILocalizedText {
   en: string
@@ -88,4 +89,4 @@ const SiteSettingsSchema = new Schema<ISiteSettings>({
   timestamps: true,
 })
 
-export const SiteSettings = mongoose.models.SiteSettings || mongoose.model<ISiteSettings>('SiteSettings', SiteSettingsSchema, 'site-settings')
+export const SiteSettings = resolveModel('SiteSettings', SiteSettingsSchema, 'site-settings')

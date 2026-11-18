@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 export interface ISubscriber extends Document {
   email: string
@@ -16,4 +17,4 @@ const SubscriberSchema = new Schema<ISubscriber>({
 
 SubscriberSchema.index({ createdAt: -1 })
 
-export const Subscriber = mongoose.models.Subscriber || mongoose.model<ISubscriber>('Subscriber', SubscriberSchema, 'subscribers')
+export const Subscriber = resolveModel('Subscriber', SubscriberSchema, 'subscribers')

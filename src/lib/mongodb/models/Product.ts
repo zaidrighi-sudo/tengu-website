@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 /** One product photo, linked to the colorway it shows. */
 export interface IProductImage {
@@ -81,4 +82,4 @@ const ProductSchema = new Schema<IProduct>({
 ProductSchema.index({ name: 'text', slug: 'text' })
 ProductSchema.index({ category: 1, active: 1, sortOrder: 1 })
 
-export const Product = mongoose.models.Product || mongoose.model<IProduct>('Product', ProductSchema, 'products')
+export const Product = resolveModel('Product', ProductSchema, 'products')

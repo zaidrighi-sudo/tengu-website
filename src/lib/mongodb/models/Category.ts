@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose'
+import { resolveModel } from './_model-cache'
 
 /** Size range for a specific size in a category's size chart */
 export interface ISizeRange {
@@ -44,4 +45,4 @@ const CategorySchema = new Schema<ICategory>({
 
 CategorySchema.index({ sortOrder: 1 })
 
-export const Category = mongoose.models.Category || mongoose.model<ICategory>('Category', CategorySchema, 'categories')
+export const Category = resolveModel('Category', CategorySchema, 'categories')
