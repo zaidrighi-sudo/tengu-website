@@ -1,9 +1,9 @@
 import { headers } from 'next/headers'
 
-import { appAuth } from '@/lib/app-auth'
-import { toStoreUserWithSpend } from '@/lib/loyalty-lifetime'
-import { getStoreData } from '@/lib/store-data'
-import { StoreEntry } from '@/store/StoreEntry'
+import { appAuth } from '@/features/auth/app-auth'
+import { toStoreUserWithSpend } from '@/features/customers/loyalty-lifetime'
+import { getStoreData } from '@/features/site-settings/store-data'
+import { StoreEntry } from '@/features/shell/StoreEntry'
 
 /**
  * Public storefront - everyone sees the shop.

@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { googleOAuthConfig, getGoogleAuthUrl } from '@/lib/google-oauth'
+import { googleOAuthConfig, getGoogleAuthUrl } from '@/features/auth/google-oauth'
 
 function generateState(): string {
   const array = new Uint8Array(32)

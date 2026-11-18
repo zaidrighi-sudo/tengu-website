@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import { connectDB, Order } from '@/lib/mongodb/models'
-import { adminAuth } from '@/lib/admin-auth'
-import { takeToken } from '@/lib/rate-limit'
+import { connectDB, Order } from '@/shared/mongodb/models'
+import { adminAuth } from '@/features/auth/admin-auth'
+import { takeToken } from '@/shared/rate-limit'
 
 /**
  * Distributor manifest export.

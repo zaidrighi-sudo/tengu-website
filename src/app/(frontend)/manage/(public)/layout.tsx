@@ -1,6 +1,6 @@
 import React from "react"
-import "@/store/styles/global.css"
-import "@/app/(frontend)/manage/(private)/admin.css"
+import "@/shared/styles/global.css"
+import "@/features/admin/admin.css"
 
 export default function PublicLayout({
   children,

@@ -27,12 +27,12 @@ You don't need to start it manually.
 
 This project uses Next.js route groups:
 
-- `src/app/(frontend)/` - Your application pages (public storefront)
-- `src/app/(frontend)/manage/` - Admin console pages (`(private)/` shell, `(public)/` login redirect) and API routes under `src/app/api/`
-- `src/lib/mongodb/` - MongoDB/Mongoose models, connection, and utilities
-- `src/components/admin/` - Admin dashboard components
-- `src/components/ui/` - Reusable UI components
-- `src/store/` - Storefront components and logic
+- `src/app/(frontend)/` - Your application pages (public storefront); route files are thin wrappers
+- `src/app/(frontend)/manage/` - Admin console pages (`(private)/` shell re-exports `features/admin/AdminLayout`, `(public)/` login redirect); routes under `src/app/api/` are thin wrappers too
+- `src/features/<feature>/` - One vertical slice per feature: frontend components, `model.ts` (Mongoose model, when it owns a collection), `backend.ts` (the feature's Server Actions) — admin CRUD pages live in the feature as `Admin*Page.tsx` and are re-exported by one-line route shims in `app/`
+- `src/shared/` - Cross-feature infrastructure (`mongodb/`, `i18n/`, `styles/`, `components/`, `utils/`, `storefront-actions.ts`); never imports from `features/`
+
+See `FRONTEND_STRUCTURE.md` for the full tree and the feature inventory.
 
 ## Key Files
 
@@ -40,13 +40,13 @@ This project uses Next.js route groups:
 - `src/app/(frontend)/page.tsx` - Home page component
 - `src/app/(frontend)/not-found.tsx` - Custom not-found page
 - `src/app/(frontend)/styles.css` - Global styles and Tailwind CSS import
-- `src/app/(frontend)/manage/(private)/layout.tsx` - Admin console shell and auth gate
+- `src/app/(frontend)/manage/(private)/layout.tsx` - Admin console shell and auth gate (re-exports `src/features/admin/AdminLayout.tsx`; keeps inline metadata)
 - `src/app/(frontend)/manage/(public)/login/page.tsx` - Admin sign-in (redirects to storefront login)
-- `src/lib/mongodb/connection.ts` - Mongoose connection utility
-- `src/lib/mongodb/models/` - Mongoose models (Product, Category, Order, User, etc.)
-- `src/lib/admin/actions/` - Admin server actions split by feature (CRUD operations), with shared helpers/types in `_shared.ts`
-- `src/lib/admin-auth.ts` - Admin JWT authentication
-- `src/lib/app-auth.ts` - Customer JWT authentication
+- `src/shared/mongodb/connection.ts` - Mongoose connection utility
+- `src/features/<feature>/model.ts` - Mongoose models, one per collection (Product, Category, Order, User, …); import them via the barrel `src/shared/mongodb/models.ts` (`@/shared/mongodb/models`)
+- `src/features/<feature>/backend.ts` - Feature server actions (CRUD operations), with shared helpers/types in `src/features/admin/actions-shared.ts` (auto-generated `Lean*` types, cache tags)
+- `src/features/auth/admin-auth.ts` - Admin JWT authentication
+- `src/features/auth/app-auth.ts` - Customer JWT authentication
 - `next.config.ts` - Next.js configuration
 - `package.json` - Dependencies and scripts
 - `.mise.toml` - Toolchain versions (Node.js, pnpm)
@@ -55,22 +55,20 @@ This project uses Next.js route groups:
 
 Tailwind CSS v4 is installed and loaded by the `@import "tailwindcss"` directive in `src/app/(frontend)/styles.css`, but the actual UI predates it and barely uses it — don't reach for Tailwind utilities by default:
 
-- **Storefront** (`src/store/`): custom CSS in `src/store/styles/` built on `tokens.css` design tokens (black/white/grays, vermilion reserved for sale/errors/hanko, Anton + Space Grotesk, zero border radius). New storefront work should reuse these tokens and hand-written class patterns.
-- **Admin console** (`src/app/(frontend)/manage/(private)/admin.css`): custom dark design system (`admin-*` classes) layered on the storefront global styles. New admin work should follow the `admin.css` patterns.
+- **Storefront** (`src/shared/styles/`, imported directly by `src/features/shell/StoreApp.tsx` and all admin pages): custom CSS in `global.css` (which `@import`s `tokens.css` and each feature CSS) built on `tokens.css` design tokens (black/white/grays, vermilion reserved for sale/errors/hanko, Anton + Space Grotesk, zero border radius). New storefront work should reuse these tokens and hand-written class patterns. `global.css` ends with a trailing comment line — the turbopack content-keyed cache serves identical-content moved CSS files from the pre-move location without it; keep it.
+- **Admin console** (`src/features/admin/admin.css`): custom dark design system (`admin-*` classes) layered on the storefront global styles. New admin work should follow the `admin.css` patterns.
 
 Keep `styles.css` for the Tailwind import, shared theme tokens, and truly global base styles; match the established pattern of the area you are editing.
 
 ## Data/Backend
 
-This project uses **MongoDB with Mongoose** for data persistence. All collections
-are defined in `src/lib/mongodb/models/` and the admin dashboard provides full
-CRUD operations via Server Actions in `src/lib/admin/actions/<feature>.ts` (one module per admin feature).
+This project uses **MongoDB with Mongoose** for data persistence. Models live in `src/features/<feature>/model.ts` (plus `src/features/auth/admin-model.ts`); import them via the barrel `@/shared/mongodb/models` (`src/shared/mongodb/models.ts`). The admin dashboard provides full CRUD operations via Server Actions in `src/features/<feature>/backend.ts` (one module per admin feature), sharing helpers/types through `src/features/admin/actions-shared.ts`.
 
 ## Authentication
 
 Two separate authentication systems:
-- **Admin auth** (`src/lib/admin-auth.ts`) - JWT-based auth for admin dashboard at `/manage`
-- **Customer auth** (`src/lib/app-auth.ts`) - JWT-based auth for storefront customers
+- **Admin auth** (`src/features/auth/admin-auth.ts`) - JWT-based auth for admin dashboard at `/manage`
+- **Customer auth** (`src/features/auth/app-auth.ts`) - JWT-based auth for storefront customers
 
 ## Admin Dashboard
 

@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { connectDB, User } from '@/lib/mongodb/models'
-import { createAppAuth } from '@/lib/app-auth'
-import { googleOAuthConfig, getGoogleAuthUrl, type GoogleUserInfo } from '@/lib/google-oauth'
+import { connectDB, User } from '@/shared/mongodb/models'
+import { createAppAuth } from '@/features/auth/app-auth'
+import { googleOAuthConfig, getGoogleAuthUrl, type GoogleUserInfo } from '@/features/auth/google-oauth'
 
 // Generate a random state for CSRF protection
 function generateState(): string {

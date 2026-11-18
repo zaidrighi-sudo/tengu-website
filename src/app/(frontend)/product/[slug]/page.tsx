@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import "@/store/styles/global.css"
-import { getStoreData } from "@/lib/store-data"
-import { siteUrl } from "@/lib/site-url"
-import ProductDetail from "@/store/pages/ProductDetail"
-import { imagesForColor, hasStock } from "@/store/utils/variants"
-import type { StoreData } from "@/store/data/settings"
-import type { Product } from "@/store/data/products"
+import "@/shared/styles/global.css"
+import { getStoreData } from "@/features/site-settings/store-data"
+import { siteUrl } from "@/shared/site-url"
+import ProductDetail from "@/features/products/ProductDetail"
+import { imagesForColor, hasStock } from "@/features/products/variants"
+import type { StoreData } from "@/features/site-settings/data"
+import type { Product } from "@/features/products/products"
 
 /**
  * Real, indexable product route: /product/<slug>

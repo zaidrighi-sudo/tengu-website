@@ -1,7 +1,3 @@
-import { getDashboardStats } from "@/lib/admin/actions/dashboard"
-import { AdminDashboardContent } from "./AdminDashboardContent"
+import AdminDashboardPage from "@/features/dashboard/AdminDashboardPage"
 
-export default async function AdminDashboardPage() {
-  const stats = await getDashboardStats()
-  return <AdminDashboardContent stats={stats} />
-}
+export default AdminDashboardPage

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
-import { siteUrl } from "@/lib/site-url"
-import { getStoreData } from "@/lib/store-data"
+import { siteUrl } from "@/shared/site-url"
+import { getStoreData } from "@/features/site-settings/store-data"
 
 export const revalidate = 300
 

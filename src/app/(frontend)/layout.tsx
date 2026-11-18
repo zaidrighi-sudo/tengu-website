@@ -2,13 +2,13 @@ import React from "react"
 import type { Metadata } from "next"
 import { cookies } from "next/headers"
 import Script from "next/script"
-import { BodyCustomCode, renderHeadCustomCode } from "@/lib/make-custom-code"
+import { BodyCustomCode, renderHeadCustomCode } from "@/features/site-settings/make-custom-code"
 import {
   makeSiteSettings,
   sanitizeHtmlAttribute,
-} from "@/lib/make-site-settings"
-import { siteUrl } from "@/lib/site-url"
-import { LanguageProvider } from "@/store/components/LanguageProvider"
+} from "@/features/site-settings/make-site-settings"
+import { siteUrl } from "@/shared/site-url"
+import { LanguageProvider } from "@/shared/i18n/LanguageProvider"
 import "./styles.css"
 
 const defaultTitle = "Tengu"

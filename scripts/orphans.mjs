@@ -1,6 +1,6 @@
 /**
- * Orphan scan: lists src files unreachable from the app/, store/, lib/ and
- * components/ entry trees. A file listed here is dead code candidate —
+ * Orphan scan: lists src files unreachable from the app/ route tree.
+ * A file listed here is dead code candidate —
  * double-check before deleting (dynamic imports and route handlers may not
  * be statically visible).
  *
@@ -41,7 +41,7 @@ const allFiles = []
   }
 })(SRC)
 
-const entryDirs = ['app', 'store', 'lib', 'components'].map((d) => path.normalize(path.join(SRC, d)) + path.sep)
+const entryDirs = ['app'].map((d) => path.normalize(path.join(SRC, d)) + path.sep)
 const seen = new Set()
 const queue = allFiles.filter((f) => entryDirs.some((d) => f.startsWith(d)))
 while (queue.length) {
