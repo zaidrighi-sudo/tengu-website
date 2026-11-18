@@ -665,5 +665,8 @@ export const fr: Record<string, string> = {
   "Sign in and spend {threshold} on delivered orders to unlock free home delivery forever.": "Connectez-vous et cumulez {threshold} en commandes livrées pour débloquer la livraison à domicile gratuite à vie.",
   "Free home delivery unlocked — every order, every commune.": "Livraison à domicile gratuite débloquée — chaque commande, chaque commune.",
   "Progress to free home delivery": "Progression vers la livraison à domicile gratuite",
+  "Loyalty": "Fidélité",
+  "Hello, here is my order:": "Bonjour, voici ma commande :",
+  "Send order on WhatsApp": "Envoyer la commande sur WhatsApp",
   "{spent} / {threshold} spent on delivered orders": "{spent} / {threshold} dépensés en commandes livrées",
 }

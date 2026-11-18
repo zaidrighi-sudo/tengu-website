@@ -684,5 +684,8 @@ export const ar: Record<string, string> = {
   "Sign in and spend {threshold} on delivered orders to unlock free home delivery forever.": "سجّل الدخول وأصرف {threshold} على طلبات مسلّمة للحصول على توصيل مجاني إلى المنزل إلى الأبد.",
   "Free home delivery unlocked — every order, every commune.": "أصبح التوصيل إلى المنزل مجانيًا — كل طلبية، في كل بلدية.",
   "Progress to free home delivery": "التقدم نحو التوصيل المجاني إلى المنزل",
+  "Loyalty": "الولاء",
+  "Hello, here is my order:": "مرحباً، هذه طلبيتي:",
+  "Send order on WhatsApp": "أرسل الطلب عبر واتساب",
   "{spent} / {threshold} spent on delivered orders": "{spent} / {threshold} مصروفة على طلبات مسلّمة",
 }

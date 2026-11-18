@@ -79,6 +79,8 @@ RSC `page.tsx` → `getStoreData()` (Mongo via `connectDB`, cache tag `store-dat
 
 Admin image uploads go through `ImageUploadField` → `POST /api/media/upload` → `media` collection → served at `/api/media/file/<id>`. There is **no** `uploadMedia` server action anymore (it was dead code with no callers).
 
+Order stock handling: placing an order atomically deducts `inventory.$.quantity` per variant (with rollback on failure). Transitioning an order to/from `cancelled`/`returned` in the admin (via the quick status control or the edit form) gives the quantities back to stock (or re-deducts them) — see `lib/admin/actions/orders.ts`.
+
 ## Key invariants
 
 - `src/lib/mongodb/models/` is the ONLY model location — import via `@/lib/mongodb/models`.
@@ -96,12 +98,23 @@ Admin image uploads go through `ImageUploadField` → `POST /api/media/upload` �
 - `scripts/rehash-passwords.mjs` (`pnpm rehash:passwords`) — scrypt-upgrade plaintext passwords in `users`/`admins`.
 - `scripts/check-imports.mjs` (`pnpm verify`) — every aliased/relative import in `src` resolves to a file.
 - `scripts/orphans.mjs` (`pnpm orphans`) — lists src files unreachable from the entry trees (dead-code sweep).
+- `scripts/backup.mjs` (`pnpm backup`) — read-only EJSON dump of every collection into gitignored `backups/<timestamp>/` (full-fidelity BSON types; customer data — never commit).
+- `scripts/restore.mjs` (`pnpm restore <dir> --confirm <dbName> [--uri …]`) — destructive restore; drops and replaces each backed-up collection in the target database.
 - `oxfmt.config.ts` drives `pnpm format` (oxfmt).
 - `pnpm build` builds for production. Do not run `next build` against a dev server that is running (`.next` is shared); run `npx tsc --noEmit` + `pnpm verify` + `pnpm orphans` instead.
 
 ## Environment
 
 See `.env.example`. Required: `DATABASE_URI` (MongoDB), `ADMIN_JWT_SECRET`, `APP_JWT_SECRET`. Optional: `NEXT_PUBLIC_SITE_URL` (canonical/OG/sitemap), Google OAuth trio, `PAYLOAD_SECRET` (legacy, unused). The dev server connects to the live Atlas database — be careful with admin saves.
+
+## Database backups
+
+```bash
+pnpm backup                                 # full EJSON dump → backups/<timestamp>/
+pnpm restore backups/<timestamp> --confirm tengu   # destructive restore into DATABASE_URI
+```
+
+`backups/` is gitignored and contains customer data — never commit it, store it locally or in an encrypted volume. Run `pnpm backup` before any risky operation (migration, restore, deploy with schema changes).
 
 ## Caveats
 

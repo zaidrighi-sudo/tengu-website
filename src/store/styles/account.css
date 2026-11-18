@@ -912,3 +912,15 @@
     animation: none;
   }
 }
+
+/* ---------- Loyalty progress (account) ---------- */
+.acct-loyalty {
+  max-width: 36rem;
+  padding: var(--space-6) 0 var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-6);
+}
+
+.acct-loyalty .acct-h {
+  margin: 0 0 var(--space-2);
+}

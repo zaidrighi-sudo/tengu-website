@@ -6,6 +6,7 @@ import { useAuth } from "@/store/context/AuthContext"
 import { wilayaDisplay } from "@/store/data/algeria"
 import { deliveryWindow, loadOrder } from "@/store/utils/checkout"
 import { formatMoney } from "@/store/utils/format"
+import { siteSettings } from "@/store/data/settings"
 import { t, tr, dateFormatter } from "@/store/i18n"
 import { StoreImage } from "@/store/components/StoreImage"
 
@@ -64,6 +65,25 @@ export default function Order() {
   }
 
   const { address } = order
+
+  // "Send this order on WhatsApp" — uses the store's contact phone from the
+  // CMS (Site settings → Contact phone), normalised to international format.
+  const whatsapp = (() => {
+    const raw = (siteSettings.phone ?? "").replace(/[^\d+]/g, "")
+    if (!raw) return null
+    let intl = raw.replace(/^\+/, "")
+    if (intl.startsWith("00")) intl = intl.slice(2)
+    else if (intl.startsWith("0")) intl = `213${intl.slice(1)}`
+    else if (!intl.startsWith("213")) intl = `213${intl}`
+    const text = [
+      t("Hello, here is my order:"),
+      `${t("Order")} ${order.number}`,
+      `${t("Total")}: ${formatMoney(order.total)}`,
+      `${wilayaDisplay(address.region)} — ${tr(address.city)}`,
+      `${tr(address.firstName)} ${tr(address.lastName)} · ${tr(address.phone)}`,
+    ].join("\n")
+    return `https://wa.me/${intl}?text=${encodeURIComponent(text)}`
+  })()
   const steps: { icon: IconName; title: string; text: string }[] = [
     {
       icon: "phone",
@@ -157,6 +177,11 @@ export default function Order() {
               <a className="btn btn-solid btn-lg" href="#/shop">
                 {t("Continue shopping")} <Icon name="arrow" />
               </a>
+              {whatsapp && (
+                <a className="btn btn-lg" href={whatsapp} target="_blank" rel="noreferrer">
+                  <Icon name="phone" /> {t("Send order on WhatsApp")}
+                </a>
+              )}
               <a className="co-link" href="#/">
                 <Icon name="arrow" /> {t("Back to home")}
               </a>

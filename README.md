@@ -32,6 +32,13 @@ pnpm orphans           # dead-code sweep (unreachable src files)
 
 Do not run `pnpm build`/`next build` while the dev server is running — they share `.next`.
 
+## Backups
+
+```bash
+pnpm backup                                        # full dump → backups/ (gitignored)
+pnpm restore backups/<timestamp> --confirm tengu   # destructive restore
+```
+
 ## Project layout
 
 See [FRONTEND_STRUCTURE.md](./FRONTEND_STRUCTURE.md) for the full map, and [PRODUCT.md](./PRODUCT.md) for the product brief.

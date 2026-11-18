@@ -3,6 +3,7 @@ import { AddressesTab } from "@/store/components/account/AddressesTab"
 import { OrdersTab } from "@/store/components/account/OrdersTab"
 import { ProfileTab } from "@/store/components/account/ProfileTab"
 import { WishlistPanel } from "@/store/components/account/WishlistPanel"
+import { SpendProgress } from "@/store/components/cart/SpendProgress"
 import { Layout } from "@/store/components/Layout"
 import { PageHead } from "@/store/components/page/PageHead"
 import { useAuth } from "@/store/context/AuthContext"
@@ -89,6 +90,11 @@ export default function Account() {
         </PageHead>
 
         <div className="acct-body">
+          {/* Loyalty: lifetime delivered spend progress toward free home delivery */}
+          <section className="acct-loyalty" aria-label={t("Loyalty")}>
+            <h2 className="acct-h">{t("Loyalty")}</h2>
+            <SpendProgress />
+          </section>
           <div className="acct-tabs-wrap">
             <div className="acct-tabs" role="tablist" aria-label={t("Account sections")} onKeyDown={onKeyDown}>
               {TABS.map((id) => (

@@ -10,6 +10,8 @@
     "format": "oxfmt",
     "verify": "node scripts/check-imports.mjs",
     "orphans": "node scripts/orphans.mjs",
+    "backup": "node scripts/backup.mjs",
+    "restore": "node scripts/restore.mjs",
     "migrate:variants": "node scripts/migrate-product-variants.mjs",
     "rehash:passwords": "node scripts/rehash-passwords.mjs"
   },
