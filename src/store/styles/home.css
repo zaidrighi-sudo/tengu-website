@@ -1,0 +1,120 @@
+/* Home page hero. Other sections: editorial.css. Product cards: product-card.css. */
+
+/* ---------- Hero ---------- */
+.hero {
+  display: grid;
+  isolation: isolate;
+  min-height: calc(100svh - var(--announce-h));
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-media {
+  animation: hero-settle 2.6s var(--ease-out) both;
+  filter: grayscale(1) contrast(1.18) brightness(0.72);
+  height: 100%;
+  inset: 0;
+  object-position: 50% 25%;
+  position: absolute;
+  width: 100%;
+  z-index: -3;
+}
+
+@keyframes hero-settle {
+  from {
+    transform: scale(1.08);
+  }
+}
+
+.hero-shade {
+  background:
+    linear-gradient(to bottom, rgb(0 0 0 / 0.7), transparent 28%),
+    linear-gradient(to top, var(--color-black) 0%, transparent 55%),
+    linear-gradient(to right, rgb(0 0 0 / 0.55), transparent 65%);
+  inset: 0;
+  position: absolute;
+  z-index: -2;
+}
+
+/* Vertical kanji for "tengu", hanging from the right edge */
+.hero-kanji {
+  animation: hero-rise 1.4s var(--ease-out) 0.6s both;
+  color: var(--color-white);
+  font-size: clamp(2.75rem, 8.5vw, 7.5rem);
+  letter-spacing: 0.14em;
+  line-height: 1;
+  pointer-events: none;
+  position: absolute;
+  inset-inline-end: var(--space-page);
+  text-shadow: 0 0 2rem rgb(0 0 0 / 0.5);
+  top: calc(var(--header-h) + var(--space-6));
+  user-select: none;
+  writing-mode: vertical-rl;
+  z-index: 1;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: var(--container-max);
+  padding: calc(var(--header-h) + var(--space-6)) var(--space-page) var(--space-5);
+  width: 100%;
+}
+
+.hero-eyebrow {
+  animation: hero-rise 1s var(--ease-out) 0.3s both;
+  color: var(--color-gray-200);
+}
+
+.hero-title {
+  font-size: var(--text-display);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-none);
+  margin-inline-start: -0.03em;
+}
+
+.hero-letter {
+  animation: hero-rise 1.1s var(--ease-out) calc(0.25s + var(--i) * 0.08s) both;
+  display: inline-block;
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.14em);
+  }
+}
+
+.hero-row {
+  animation: hero-rise 1s var(--ease-out) 0.9s both;
+  align-items: end;
+  border-top: 1px solid var(--color-white);
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+}
+
+.hero-copy {
+  color: var(--color-gray-200);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  max-width: 26rem;
+}
+
+/* ---------- Tablet ---------- */
+@media (min-width: 48rem) {
+  .hero-row {
+    align-items: center;
+    grid-template-columns: 1fr auto;
+  }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 64rem) {
+  .hero-content {
+    padding-bottom: var(--space-6);
+  }
+}

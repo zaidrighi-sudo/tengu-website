@@ -1,0 +1,699 @@
+/* Product card (shared by the home arrivals row and the shop grid). */
+.product-card {
+  background: var(--color-black);
+  border-bottom: 1px solid var(--color-border);
+  border-inline-end: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  outline: none;
+  position: relative;
+}
+
+/* Programmatic focus (after "Load more") should not draw a ring on the card. */
+.product-card:focus-visible {
+  outline: none;
+}
+
+/* ---------- Media: 4:5 with a second photo on hover ---------- */
+.product-media {
+  aspect-ratio: 4 / 5;
+  background: var(--color-gray-950);
+  overflow: hidden;
+  position: relative;
+}
+
+.product-img {
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  transition:
+    transform 1.2s var(--ease-out),
+    opacity 0.6s var(--ease-out);
+  width: 100%;
+}
+
+.product-img-alt {
+  opacity: 0;
+}
+
+.product-card:hover .product-img,
+.product-card:focus-within .product-img {
+  transform: scale(1.04);
+}
+
+.product-card:not(.is-soldout):hover .product-img-alt,
+.product-card:not(.is-soldout):focus-within .product-img-alt {
+  opacity: 1;
+}
+
+.product-card.is-soldout .product-img {
+  opacity: 0.6;
+}
+
+/* ---------- Tags ---------- */
+.product-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  inset-inline-start: var(--space-3);
+  position: absolute;
+  top: var(--space-3);
+  z-index: 2;
+}
+
+/* ---------- Quick add: always visible, hidden-until-hover on desktop ---------- */
+.quick-add {
+  align-items: center;
+  background: var(--color-white);
+  border: 0;
+  bottom: 0;
+  color: var(--color-black);
+  display: flex;
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  justify-content: space-between;
+  inset-inline-start: 0;
+  letter-spacing: var(--tracking-label);
+  min-height: 2.75rem;
+  padding: 0 var(--space-3);
+  position: absolute;
+  inset-inline-end: 0;
+  text-transform: uppercase;
+  transition:
+    transform var(--transition-base),
+    background var(--transition-fast);
+  z-index: 3;
+}
+
+.quick-add:hover:not(:disabled) {
+  background: var(--color-gray-200);
+}
+
+.quick-add:disabled {
+  background: var(--color-gray-900);
+  color: var(--color-muted);
+}
+
+/* Only where there is a real pointer and room: slide up on hover/focus. */
+@media (hover: hover) and (min-width: 48rem) {
+  .quick-add {
+    transform: translateY(100%);
+  }
+
+  .product-card:hover .quick-add,
+  .product-card:focus-within .quick-add {
+    transform: none;
+  }
+}
+
+/* ---------- Info ---------- */
+.product-info {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-3) var(--space-5);
+}
+
+.product-row {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  justify-content: space-between;
+}
+
+.product-info h3 {
+  font-size: var(--text-lg);
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+}
+
+.product-price {
+  align-items: baseline;
+  display: flex;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  gap: var(--space-2);
+}
+
+.product-price s {
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-weight: 400;
+}
+
+.product-price .is-sale {
+  color: var(--color-red);
+}
+
+.product-meta {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3);
+}
+
+.product-meta .label {
+  font-size: 0.6rem;
+}
+
+/* ---------- Swatches ---------- */
+.swatches {
+  display: flex;
+  gap: 0.375rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.swatch {
+  background: var(--swatch);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4);
+  display: block;
+  height: 0.875rem;
+  width: 0.875rem;
+}
+
+/* ---------- Skeleton ---------- */
+/* A plain opacity pulse: compositor-only and the cheapest loading animation. */
+.skeleton {
+  animation: pulse 1.4s ease-in-out infinite;
+  background: var(--color-gray-900);
+  display: block;
+}
+
+.skeleton-line {
+  height: 0.9rem;
+}
+
+.is-skeleton .product-info {
+  gap: var(--space-3);
+  padding-bottom: var(--space-6);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+/* ---------- Size selection ---------- */
+.size-panel {
+  background: var(--color-black);
+  border-top: 1px solid var(--color-gray-800);
+  bottom: 0;
+  inset-inline-start: 0;
+  padding: var(--space-3);
+  position: absolute;
+  inset-inline-end: 0;
+  z-index: 4;
+}
+
+.size-panel-head {
+  align-items: center;
+  color: var(--color-muted);
+  display: flex;
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  justify-content: space-between;
+  letter-spacing: var(--tracking-label);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+}
+
+.size-panel-close {
+  background: none;
+  border: 0;
+  color: var(--color-white);
+  font-size: 1.25rem;
+  height: 2.25rem;
+  line-height: 1;
+  width: 2.25rem;
+}
+
+.size-picker {
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.size-chip {
+  background: transparent;
+  border: 1px solid var(--color-gray-700, #4a4a4a);
+  color: var(--color-white);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  min-height: 2.75rem;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.size-chip:hover:not(:disabled),
+.size-chip:focus-visible {
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.size-chip:disabled {
+  border-color: var(--color-gray-900);
+  color: var(--color-muted);
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* Keep the quick-add bar out of the way while sizes are showing. */
+.product-card.is-picking .quick-add {
+  display: none;
+}
+
+/* Size shown under the color in bag lines. */
+.line-size {
+  border-inline-start: 1px solid var(--color-gray-700, #4a4a4a);
+  color: var(--color-white);
+  margin-inline-start: var(--space-2);
+  padding-inline-start: var(--space-2);
+}
+
+.addon-sizes {
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.addons-page .addon-sizes {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* ============================================================
+   SIZE GUIDE – Height/Weight based size recommendation
+   ============================================================ */
+
+.size-guide {
+  /* Container for both guide and picker */
+}
+
+.size-guide-toggle {
+  align-items: center;
+  background: var(--color-gray-900);
+  border: 1px solid var(--color-gray-700);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  display: inline-flex;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+  width: 100%;
+  justify-content: center;
+}
+
+.size-guide-toggle:hover {
+  background: var(--color-gray-800);
+  border-color: var(--color-gray-600);
+}
+
+.size-guide-toggle.open {
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.toggle-icon {
+  font-size: var(--text-sm);
+}
+
+.size-guide-panel {
+  animation: slideDown 0.2s var(--ease-out);
+  background: var(--color-gray-950);
+  border: 1px solid var(--color-gray-800);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.size-guide-header {
+  margin-bottom: var(--space-4);
+}
+
+.size-guide-header h4 {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  margin: 0 0 var(--space-1);
+  text-transform: uppercase;
+}
+
+.size-guide-hint {
+  color: var(--color-muted);
+  font-size: var(--text-2xs);
+  margin: 0;
+}
+
+.size-guide-inputs {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 400px) {
+  .size-guide-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.guide-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.guide-label {
+  color: var(--color-muted);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.guide-input {
+  background: var(--color-black);
+  border: 1px solid var(--color-gray-700);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  font-size: var(--text-sm);
+  min-height: 2.5rem;
+  padding: var(--space-2) var(--space-3);
+  transition: border-color var(--transition-fast);
+}
+
+.guide-input:focus {
+  border-color: var(--color-white);
+  outline: none;
+}
+
+.guide-input.error {
+  border-color: var(--color-red);
+}
+
+.guide-input::placeholder {
+  color: var(--color-gray-600);
+}
+
+.guide-error {
+  color: var(--color-red);
+  font-size: var(--text-2xs);
+}
+
+.size-guide-result {
+  margin-bottom: var(--space-4);
+}
+
+.recommendation-box {
+  align-items: flex-start;
+  background: var(--color-black);
+  border: 1px solid var(--color-gray-700);
+  border-radius: var(--radius-sm);
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+
+.recommendation-box.no-match {
+  border-color: var(--color-amber);
+}
+
+.recommendation-icon {
+  flex-shrink: 0;
+  font-size: var(--text-lg);
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.recommendation-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.recommendation-text strong {
+  display: block;
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  margin-bottom: var(--space-1);
+  text-transform: uppercase;
+}
+
+.recommended-size {
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  color: var(--color-black);
+  display: inline-block;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  padding: var(--space-1) var(--space-3);
+}
+
+.recommendation-note {
+  color: var(--color-muted);
+  font-size: var(--text-2xs);
+  margin: var(--space-2) 0 0;
+}
+
+.size-chart-scores h5 {
+  color: var(--color-muted);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  margin: 0 0 var(--space-2);
+  text-transform: uppercase;
+}
+
+.score-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.score-chip {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--color-gray-700);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  display: inline-flex;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  gap: var(--space-1);
+  letter-spacing: 0.06em;
+  min-height: 2.25rem;
+  padding: 0 var(--space-3);
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.score-chip:hover:not(:disabled) {
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.score-chip:focus-visible {
+  outline: 2px solid var(--color-white);
+  outline-offset: 2px;
+}
+
+.score-chip.recommended {
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.score-chip.low-match {
+  opacity: 0.6;
+}
+
+.score-chip.low-match:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.recommended-badge {
+  color: var(--color-amber);
+  font-size: var(--text-xs);
+}
+
+.match-score {
+  background: var(--color-gray-800);
+  border-radius: var(--radius-full);
+  color: var(--color-muted);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  padding: 0 var(--space-2);
+}
+
+.score-chip.recommended .match-score {
+  background: var(--color-black);
+  color: var(--color-amber);
+}
+
+.size-guide-close {
+  align-self: flex-end;
+  background: none;
+  border: 0;
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  margin-top: var(--space-2);
+  padding: var(--space-1) 0;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+}
+
+.size-guide-close:hover {
+  color: var(--color-white);
+}
+
+/* Compact size picker when guide is open */
+.size-picker-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.size-picker-compact .size-chip {
+  min-height: 2.25rem;
+  font-size: var(--text-2xs);
+}
+
+/* ============================================================
+   COLOR PICKER – Color selection with name and hex code
+   ============================================================ */
+
+.size-guide-colors {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-gray-800);
+}
+
+.color-picker-label {
+  color: var(--color-muted);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.color-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.color-chip {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--color-gray-700);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  display: inline-flex;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  gap: var(--space-2);
+  min-height: 2.5rem;
+  padding: 0 var(--space-3);
+  position: relative;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.color-chip:hover:not(:disabled) {
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.color-chip:focus-visible {
+  outline: 2px solid var(--color-white);
+  outline-offset: 2px;
+}
+
+.color-chip.selected {
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.color-chip-swatch {
+  border-radius: var(--radius-full);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.2);
+  height: 0.875rem;
+  width: 0.875rem;
+  flex-shrink: 0;
+}
+
+.color-chip.selected .color-chip-swatch {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+}
+
+.color-chip-name {
+  white-space: nowrap;
+}
+
+.color-chip-hex {
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.color-chip.selected .color-chip-hex,
+.color-chip:hover:not(:disabled) .color-chip-hex {
+  color: var(--color-black);
+}
+
+/* Swatches double as colorway buttons: the card image follows the choice. */
+.swatch-button {
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.swatch-button:hover {
+  transform: scale(1.15);
+}
+
+.swatch-button[aria-pressed="true"] {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.4),
+    0 0 0 2px var(--color-bg),
+    0 0 0 3px var(--color-white);
+}

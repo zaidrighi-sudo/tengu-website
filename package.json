@@ -1,0 +1,52 @@
+{
+  "name": "figma-make-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --port ${PORT:-3000} --hostname 0.0.0.0",
+    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "format": "oxfmt",
+    "migrate:variants": "node scripts/migrate-product-variants.mjs",
+    "rehash:passwords": "node scripts/rehash-passwords.mjs"
+  },
+  "dependencies": {
+    "@fontsource/anton": "^5.3.0",
+    "@fontsource/space-grotesk": "^5.3.0",
+    "dotenv": "^18.0.9",
+    "graphql": "^16.8.1",
+    "html-react-parser": "^5.2.10",
+    "jose": "^5.3.0",
+    "lucide-react": "^1.70.0",
+    "monaco-editor": "0.55.1",
+    "mongoose": "^8.5.0",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "recharts": "^3.10.1",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "24.12.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "cross-env": "^10.1.0",
+    "oxfmt": "^0.73.0",
+    "postcss": "^8.5.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=24.22.1",
+    "pnpm": "^9 || ^10 || ^11"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  }
+}

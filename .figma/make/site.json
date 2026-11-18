@@ -1,0 +1,26 @@
+{
+  "title": "Tengu",
+  "description": "Modern streetwear fashion",
+  "language": "en",
+  "robots": {
+    "index": true
+  },
+  "icons": {
+    "icon": "/favicon.ico"
+  },
+  "openGraph": {
+    "image": "/og-image.jpg"
+  },
+  "analytics": {
+    "googleAnalyticsId": ""
+  },
+  "customScripts": {
+    "headStart": "",
+    "headEnd": "",
+    "bodyStart": "",
+    "bodyEnd": ""
+  },
+  "accessibility": {
+    "addBypassLinks": true
+  }
+}
