@@ -1,4 +1,4 @@
-import { getLang } from "@/store/i18n"
+import { getLang } from "@/store/i18n/core"
 import { COMMUNES_BY_CODE, communeKey, wilayaByName } from "@/lib/algeria-data"
 
 /**

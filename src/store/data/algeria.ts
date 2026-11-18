@@ -1,4 +1,4 @@
-import { getLang } from "@/store/i18n"
+import { getLang } from "@/store/i18n/core"
 import { wilayaByName, type Wilaya } from "@/lib/algeria-data"
 
 /**

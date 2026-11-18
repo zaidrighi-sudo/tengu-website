@@ -23,6 +23,28 @@
   position: relative;
 }
 
+/* Link wrapping the photos (navigates to the real /product/<slug> route).
+   Fills the media box so the whole image is the click target. */
+.product-media-link {
+  color: inherit;
+  display: block;
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  text-decoration: none;
+}
+
+.product-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.product-name-link:hover,
+.product-name-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
 .product-img {
   height: 100%;
   inset: 0;

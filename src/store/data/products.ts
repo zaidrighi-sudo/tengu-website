@@ -30,6 +30,8 @@ export type InventoryItem = {
 
 export type Product = {
   id: string
+  /** URL slug for the real /product/<slug> route. Missing on legacy entries. */
+  slug?: string
   name: string
   category: string
   /** Primary colorway, shown in the bag. */

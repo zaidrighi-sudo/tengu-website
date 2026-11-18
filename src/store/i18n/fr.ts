@@ -1,6 +1,7 @@
 export const fr: Record<string, string> = {
   "Page not found": "Page introuvable",
   "Your bag": "Votre panier",
+  "Add to bag": "Ajouter au panier",
   "Close bag": "Fermer le panier",
   "Size": "Taille",
   "Remove {name}, size {size}, from bag": "Retirer {name}, taille {size}, du panier",

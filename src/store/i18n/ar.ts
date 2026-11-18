@@ -1,6 +1,7 @@
 export const ar: Record<string, string> = {
   "Page not found": "الصفحة غير موجودة",
   "Your bag": "سلتك",
+  "Add to bag": "أضف إلى السلة",
   "Close bag": "إغلاق السلة",
   "Size": "المقاس",
   "Remove {name}, size {size}, from bag": "إزالة {name}، المقاس {size}، من السلة",

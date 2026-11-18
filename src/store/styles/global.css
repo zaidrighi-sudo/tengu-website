@@ -11,6 +11,7 @@
 @import './auth.css';
 @import './account.css';
 @import './pages.css';
+@import './pdp.css';
 
 /* Tiny Noto Sans JP subsets: only the glyphs the site uses.
    500: katakana for the announcement accent. 900: 天 狗 新 作 for display. */

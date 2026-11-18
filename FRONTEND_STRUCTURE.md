@@ -26,7 +26,7 @@ src/
 │  ├─ pages/                   # Home, Shop, Cart, Checkout, Auth, Account, Wishlist, Order, static pages
 │  ├─ components/              # Header/Footer, home/, shop/, cart/, checkout/, account/, …
 │  ├─ data/                    # CMS-hydrated singletons (products, settings, navigation) + static data
-│  ├─ i18n/                    # en/fr/ar dictionaries, getLang, t(), RTL-aware
+│  ├─ i18n/                    # core.ts (server-safe: lang state, t(), RTL) + index.ts (client useLang hook)
 │  ├─ styles/                  # tokens.css design tokens + global/shop/cart/checkout/account/… CSS
 │  └─ utils/                   # checkout totals, images, recommendations, tracking, format
 ├─ lib/                        # Server + shared support
@@ -67,9 +67,10 @@ src/
 ## Routes
 
 - `/` — storefront (hash-routed SPA; `#/shop`, `#/cart`, `#/checkout`, …)
+- `/product/<slug>` — real product detail route (RSC, server-rendered content for SEO: OG/Twitter metadata, Product + Breadcrumb JSON-LD, ISR `revalidate=300`). Buying still adds to the shared bag and hands off to `/#/cart`. `src/app/(frontend)/product/[slug]/page.tsx` + buying island `src/store/pages/ProductDetail.tsx`; product cards link here.
 - `/manage/login` → redirects to `/account?next=/manage/dashboard`
 - `/manage/<feature>` — admin console (requires admin JWT cookie; enforced in `manage/(private)/layout.tsx`)
-- `/sitemap.xml`, `/robots.txt` — `src/app/sitemap.ts` / `src/app/robots.ts` (only `/` is indexable; `/manage` and `/api` are disallowed)
+- `/sitemap.xml`, `/robots.txt` — `src/app/sitemap.ts` / `src/app/robots.ts` (`/` and every `/product/<slug>` are indexable; `/manage` and `/api` are disallowed)
 - `/api/media/upload` (POST, admin) — create media document; upload path used by the admin UI
 - `/api/export/orders?status=new` (GET, admin) — distributor manifest CSV (wilaya → commune, oldest first; `status=all` exports everything); linked from the orders toolbar as EXPORT CSV
 - `/api/media/file/[id]` — serve stored images (with 1 h cache + size guard)

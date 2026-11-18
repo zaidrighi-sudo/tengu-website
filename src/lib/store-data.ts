@@ -102,6 +102,7 @@ async function loadStoreData(): Promise<StoreData> {
     return [
       {
         id: String(doc._id),
+        slug: typeof doc.slug === 'string' && doc.slug ? doc.slug : undefined,
         name: doc.name,
         category,
         color: mainImage?.color || colors[0] || '',

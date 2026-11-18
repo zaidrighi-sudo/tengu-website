@@ -41,6 +41,8 @@ export function ProductCard({
   const soldOut = product.status === "soldout" || !hasStock(product)
   const colorOut = !sizesForColor(product, selectedColor).some((size) => size.available)
   const unavailable = soldOut || colorOut
+  // Real route for this piece — internal link for SEO; no hash routing.
+  const href = product.slug ? `/product/${encodeURIComponent(product.slug)}` : null
 
   const discount = product.compareAt
     ? Math.round((1 - product.price / product.compareAt) * 100)
@@ -77,13 +79,26 @@ export function ProductCard({
       tabIndex={-1}
     >
       <div className="product-media">
-        <StoreImage
-          className="photo product-img"
-          src={mainImage}
-          alt={`${product.name} in ${selectedColor.toLowerCase()}`}
-        />
-        {/* Second photo of the colorway crossfades in on hover or focus. */}
-        <StoreImage className="photo product-img product-img-alt" src={hoverImage} alt="" />
+        {href ? (
+          <a className="product-media-link" href={href} aria-label={tr(product.name)}>
+            <StoreImage
+              className="photo product-img"
+              src={mainImage}
+              alt={`${product.name} in ${selectedColor.toLowerCase()}`}
+            />
+            {/* Second photo of the colorway crossfades in on hover or focus. */}
+            <StoreImage className="photo product-img product-img-alt" src={hoverImage} alt="" />
+          </a>
+        ) : (
+          <>
+            <StoreImage
+              className="photo product-img"
+              src={mainImage}
+              alt={`${product.name} in ${selectedColor.toLowerCase()}`}
+            />
+            <StoreImage className="photo product-img product-img-alt" src={hoverImage} alt="" />
+          </>
+        )}
 
         <div className="product-flags">
           {product.status === "new" && <span className="tag">{t("New")}</span>}
@@ -150,7 +165,15 @@ export function ProductCard({
 
       <div className="product-info">
         <div className="product-row">
-          <h3>{tr(product.name)}</h3>
+          <h3>
+            {href ? (
+              <a className="product-name-link" href={href}>
+                {tr(product.name)}
+              </a>
+            ) : (
+              tr(product.name)
+            )}
+          </h3>
           <p className="product-price">
             <span className={cn(product.status === "sale" && "is-sale")}>
               {formatPrice(product.price)}

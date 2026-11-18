@@ -1,13 +1,16 @@
 import type { MetadataRoute } from "next"
 import { siteUrl } from "@/lib/site-url"
+import { getStoreData } from "@/lib/store-data"
+
+export const revalidate = 300
 
 /**
- * Hash-routed SPA: only the root page is crawlable. Admin console and API
- * are excluded via robots.ts. Extend with real product routes if/when the
- * storefront moves off the hash router.
+ * Indexable surfaces: the storefront root and the real product routes
+ * (/product/<slug>). Everything else is either hash-routed SPA content or
+ * the admin console / API, which robots.ts excludes.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const entries: MetadataRoute.Sitemap = [
     {
       url: siteUrl(),
       lastModified: new Date(),
@@ -15,4 +18,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
   ]
+
+  try {
+    const data = await getStoreData()
+    for (const product of data.products) {
+      if (!product.slug) continue
+      entries.push({
+        url: `${siteUrl()}/product/${encodeURIComponent(product.slug)}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
+      })
+    }
+  } catch (error) {
+    // Database unavailable: keep the minimal sitemap rather than fail the route.
+    console.error("[sitemap] Could not load products:", error)
+  }
+
+  return entries
 }

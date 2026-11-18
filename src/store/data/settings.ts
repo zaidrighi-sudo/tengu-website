@@ -10,7 +10,7 @@ import {
   shopCategories,
   updateColorsFromCMS,
 } from "@/store/data/products"
-import { getLang } from "@/store/i18n"
+import { getLang } from "@/store/i18n/core"
 
 export type CMSSizeRange = {
   size: string
