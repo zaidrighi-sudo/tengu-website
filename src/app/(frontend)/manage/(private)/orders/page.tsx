@@ -83,6 +83,13 @@ export default async function AdminOrdersPage({
               CLEAR
             </Link>
           )}
+          <a
+            href={`/api/export/orders?status=${encodeURIComponent(status || "new")}`}
+            className="admin-btn admin-btn-sm admin-btn-secondary"
+            title="Download a CSV of the filtered orders (defaults to status NEW), grouped by wilaya and commune for the delivery rounds."
+          >
+            EXPORT CSV
+          </a>
         </div>
       </form>
 

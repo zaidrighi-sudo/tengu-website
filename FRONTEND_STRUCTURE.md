@@ -71,6 +71,7 @@ src/
 - `/manage/<feature>` — admin console (requires admin JWT cookie; enforced in `manage/(private)/layout.tsx`)
 - `/sitemap.xml`, `/robots.txt` — `src/app/sitemap.ts` / `src/app/robots.ts` (only `/` is indexable; `/manage` and `/api` are disallowed)
 - `/api/media/upload` (POST, admin) — create media document; upload path used by the admin UI
+- `/api/export/orders?status=new` (GET, admin) — distributor manifest CSV (wilaya → commune, oldest first; `status=all` exports everything); linked from the orders toolbar as EXPORT CSV
 - `/api/media/file/[id]` — serve stored images (with 1 h cache + size guard)
 - `/api/auth/google/*` — Google sign-in for customers
 
