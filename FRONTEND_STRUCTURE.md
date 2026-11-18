@@ -7,7 +7,6 @@ src/
 ├─ app/                        # Next.js App Router (routes) — thin wrappers only
 │  ├─ (frontend)/              # Hash-routed SPA lives here (storefront on /)
 │  │  ├─ page.tsx              # RSC entry: session + getStoreData() → StoreEntry
-│  │  ├─ auth-actions.ts       # Customer auth Server Actions
 │  │  ├─ layout.tsx            # Metadata, GA, custom-code injection
 │  │  ├─ not-found.tsx
 │  │  ├─ styles.css            # Tailwind import + global base

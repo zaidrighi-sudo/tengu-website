@@ -1,5 +1,5 @@
 {
-  "name": "figma-make-app",
+  "name": "tengu-website",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -41,7 +41,7 @@
     "typescript": "6.0.3"
   },
   "engines": {
-    "node": ">=24.22.1",
+    "node": ">=20.9.0",
     "pnpm": "^9 || ^10 || ^11"
   },
   "pnpm": {

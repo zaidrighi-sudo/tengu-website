@@ -30,14 +30,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(dirname),
   },
-  output: 'standalone',
   images: {
-    loader: 'default',
+    loader: 'custom',
     loaderFile: './figma-image-loader.ts',
   },
-  // Don't block publishing or preview deploys on errors if the emitted JS is valid
+  // Fail the build on type errors: `npx tsc --noEmit` already passes, so a
+  // broken deploy is never worth a silently ignored type error.
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   // `next dev` serves the Make preview at a per-sandbox cross-origin host. Next
   // blocks its dev resources (`/_next/*`, HMR WebSocket, internal endpoints)

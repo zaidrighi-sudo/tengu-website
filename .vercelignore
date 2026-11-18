@@ -1,0 +1,15 @@
+# Local database dumps contain real customer data — never upload them.
+backups/
+
+# Build artifacts, caches and local tool state (rebuilt by Vercel).
+.next/
+tsconfig.tsbuildinfo
+.claude/
+.figaro/
+.impeccable/
+.figma/runtime/
+
+# Secrets — configure these in the Vercel project settings instead.
+.env
+.env.*
+!.env.example

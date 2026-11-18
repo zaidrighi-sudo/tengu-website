@@ -39,14 +39,51 @@ pnpm backup                                        # full dump → backups/ (git
 pnpm restore backups/<timestamp> --confirm tengu   # destructive restore
 ```
 
+## Deploy on Vercel
+
+The app is a standard Next.js App Router project and needs no `vercel.json`:
+Vercel detects Next.js, runs `pnpm install` from `pnpm-lock.yaml` and `pnpm build`
+from `package.json`.
+
+1. Push this folder (the one containing `.git`) to GitHub/GitLab/Bitbucket and
+   import the repository in Vercel. Leave **Root Directory** at the repository
+   root and the framework preset on **Next.js**.
+2. Add the environment variables in **Project → Settings → Environment
+   Variables** (Production and Preview):
+
+   | Variable | Value |
+   | --- | --- |
+   | `DATABASE_URI` | MongoDB Atlas connection string (`mongodb+srv://…`) |
+   | `ADMIN_JWT_SECRET` | random string, **at least 32 characters** |
+   | `APP_JWT_SECRET` | random string, **at least 32 characters** |
+   | `NEXT_PUBLIC_SITE_URL` | public origin, e.g. `https://tengu.dz` |
+   | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | optional, for Google sign-in |
+   | `GOOGLE_CALLBACK_URL` | `https://<domain>/api/auth/google/callback` |
+
+   In production the auth layer throws instead of falling back to a dev key when
+   a JWT secret is missing or shorter than 32 characters — set both before the
+   first deploy.
+3. In MongoDB Atlas → **Network Access**, allow Vercel: `0.0.0.0/0` (Atlas does
+   not support Vercel's egress IPs on the free/shared tiers) or the fixed IPs of
+   your Vercel plan.
+4. Keep `backups/`, `.env` and local tool state out of the deployment. They are
+   already gitignored and listed in `.vercelignore`, but never commit or upload
+   a database dump — it contains customer data.
+
+Deploying from the CLI instead of Git:
+
+```bash
+pnpm dlx vercel        # link the project and create a preview deployment
+pnpm dlx vercel --prod # promote to production
+```
+
 ## Project layout
 
 See [FRONTEND_STRUCTURE.md](./FRONTEND_STRUCTURE.md) for the full map, and [PRODUCT.md](./PRODUCT.md) for the product brief.
 
-- `src/app/(frontend)/` — routes: storefront entry, storefront/legacy actions, `manage/` admin console
-- `src/store/` — storefront implementation (pages, components, context, i18n, styles, data singletons)
-- `src/lib/` — server support: mongodb models, auth, `admin/actions/<feature>.ts` (admin Server Actions), delivery fees, loyalty calculation
-- `src/components/` — admin and shared UI components
+- `src/app/(frontend)/` — routes: storefront entry, `product/[slug]`, `manage/` admin console, `api/` route handlers
+- `src/features/<feature>/` — one vertical slice per feature (storefront + admin UI, `model.ts`, `backend.ts`)
+- `src/shared/` — cross-feature infrastructure: mongodb models barrel, i18n, styles, components, utils
 - `scripts/` — maintenance and verification scripts
 
 ## Conventions
