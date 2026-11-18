@@ -44,7 +44,7 @@ This project uses Next.js route groups:
 - `src/app/(frontend)/manage/(public)/login/page.tsx` - Admin sign-in (redirects to storefront login)
 - `src/lib/mongodb/connection.ts` - Mongoose connection utility
 - `src/lib/mongodb/models/` - Mongoose models (Product, Category, Order, User, etc.)
-- `src/lib/admin/actions.ts` - Admin server actions (CRUD operations)
+- `src/lib/admin/actions/` - Admin server actions split by feature (CRUD operations), with shared helpers/types in `_shared.ts`
 - `src/lib/admin-auth.ts` - Admin JWT authentication
 - `src/lib/app-auth.ts` - Customer JWT authentication
 - `next.config.ts` - Next.js configuration
@@ -64,7 +64,7 @@ Keep `styles.css` for the Tailwind import, shared theme tokens, and truly global
 
 This project uses **MongoDB with Mongoose** for data persistence. All collections
 are defined in `src/lib/mongodb/models/` and the admin dashboard provides full
-CRUD operations via Server Actions in `src/lib/admin/actions.ts`.
+CRUD operations via Server Actions in `src/lib/admin/actions/<feature>.ts` (one module per admin feature).
 
 ## Authentication
 
