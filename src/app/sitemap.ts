@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next"
 import { siteUrl } from "@/lib/site-url"
 
-// The storefront is a single-page app whose sections live behind hash routes
-// (#/shop, #/about, ...). Only the root URL is crawlable, so the sitemap is
-// deliberately minimal instead of listing volatile hash fragments.
+/**
+ * Hash-routed SPA: only the root page is crawlable. Admin console and API
+ * are excluded via robots.ts. Extend with real product routes if/when the
+ * storefront moves off the hash router.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
