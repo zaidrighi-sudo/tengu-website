@@ -29,11 +29,20 @@ export async function getDashboardStats() {
   ])
 
   // Calculate total revenue: cancelled or returned orders collected nothing.
+  // One pass gives revenue + order count (for AOV); a second distinct() pass
+  // gives the number of unique buyer phones (for LTV).
   const revenueAgg = await Order.aggregate([
     { $match: { status: { $nin: ["cancelled", "returned"] } } },
-    { $group: { _id: null, total: { $sum: "$total" } } },
+    { $group: { _id: null, total: { $sum: "$total" }, count: { $sum: 1 } } },
   ])
   const totalRevenue = revenueAgg[0]?.total || 0
+  const collectedOrders = revenueAgg[0]?.count || 0
+  const avgOrderValue = collectedOrders > 0 ? Math.round(totalRevenue / collectedOrders) : 0
+  const buyerPhones = await Order.distinct("customer.phone", {
+    status: { $nin: ["cancelled", "returned"] },
+    "customer.phone": { $nin: [null, ""] },
+  })
+  const ltv = buyerPhones.length > 0 ? Math.round(totalRevenue / buyerPhones.length) : 0
 
   // Outcome split across every order, recorded after the confirmation call:
   // completed (delivered & paid), returned (came back), annulled (cancelled).
@@ -84,6 +93,10 @@ export async function getDashboardStats() {
     createdAt: order.createdAt,
   }))
 
+  // Cancellation rate across resolved orders (delivered + returned + annulled).
+  const resolvedTotal = outcomes.delivered.count + outcomes.returned.count + outcomes.cancelled.count
+  const cancelRate = resolvedTotal > 0 ? Math.round((outcomes.cancelled.count / resolvedTotal) * 100) : null
+
   return {
     totalOrders,
     totalRevenue,
@@ -94,5 +107,8 @@ export async function getDashboardStats() {
     recentOrders: formattedRecentOrders,
     salesData,
     outcomes,
+    avgOrderValue,
+    ltv,
+    cancelRate,
   }
 }

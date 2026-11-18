@@ -17,6 +17,9 @@ import {
   CircleX,
   RotateCcw,
   TrendingUp,
+  TrendingDown,
+  Banknote,
+  Wallet,
 } from "lucide-react"
 import { RevenueTrendChart, OrderVolumeChart } from "./AdminCharts"
 
@@ -46,6 +49,12 @@ interface DashboardStats {
     returned: { count: number; value: number }
     cancelled: { count: number; value: number }
   }
+  /** Collected revenue / collected orders (all-time). */
+  avgOrderValue: number
+  /** Collected revenue / unique buyer phones (all-time). */
+  ltv: number
+  /** Cancelled / (delivered + returned + cancelled), % — null when nothing resolved yet. */
+  cancelRate: number | null
 }
 
 interface AdminDashboardContentProps {
@@ -170,6 +179,22 @@ export function AdminDashboardContent({ stats }: AdminDashboardContentProps) {
       subtitle: "ALL-TIME STORE GROSS",
       hasAlert: false,
       icon: DollarSign,
+    },
+    {
+      key: "aov",
+      label: "AVG ORDER VALUE",
+      value: formatCurrency(stats.avgOrderValue),
+      subtitle: "COLLECTED REVENUE PER ORDER",
+      hasAlert: false,
+      icon: Banknote,
+    },
+    {
+      key: "ltv",
+      label: "LIFETIME VALUE / BUYER",
+      value: formatCurrency(stats.ltv),
+      subtitle: "ALL-TIME REVENUE PER UNIQUE PHONE",
+      hasAlert: false,
+      icon: Wallet,
     },
     {
       key: "customers",
@@ -340,6 +365,16 @@ export function AdminDashboardContent({ stats }: AdminDashboardContentProps) {
             <div className="admin-stat-value">{completionRate === null ? "—" : `${completionRate}%`}</div>
             <div className="admin-stat-subtitle">
               <span>{outcomeTotal} RESOLVED ORDERS</span>
+            </div>
+          </article>
+          <article className="admin-stat-card">
+            <div className="admin-stat-head">
+              <span className="admin-stat-label">CANCELLATION RATE</span>
+              <TrendingDown className="admin-stat-icon" aria-hidden="true" />
+            </div>
+            <div className="admin-stat-value">{stats.cancelRate === null ? "—" : `${stats.cancelRate}%`}</div>
+            <div className="admin-stat-subtitle">
+              <span>ANNULLED OF {outcomeTotal} RESOLVED</span>
             </div>
           </article>
         </div>
