@@ -1,5 +1,5 @@
 import { type RefObject, useRef } from "react"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { cn } from "@/shared/utils/cn"
 import { useDialog } from "@/shared/utils/useDialog"
 import { FACETS, FACET_LABELS, type Filters, activeChips } from "@/features/shop/utils"

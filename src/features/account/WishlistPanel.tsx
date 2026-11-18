@@ -1,5 +1,5 @@
 import { ProductCard } from "@/features/products/ProductCard"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { useCallback } from "react"
 import { useCart } from "@/features/cart/CartContext"
 import { useWishlist } from "@/features/wishlist/WishlistContext"

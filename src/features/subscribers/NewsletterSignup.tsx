@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react"
 import { useState, type FormEvent } from "react"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { subscribe as subscribeOnServer } from "@/features/subscribers/backend"
 import { getLang, t } from "@/shared/i18n"
 import { localized, siteSettings } from "@/features/site-settings/data"

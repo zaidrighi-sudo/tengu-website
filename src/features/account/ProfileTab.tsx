@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react"
 import { CheckField, ErrorSummary, PasswordField, TextField } from "@/features/checkout/Field"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { type User, useAuth } from "@/features/auth/AuthContext"
 import { validatePassword } from "@/features/auth/utils"
 import { type Errors, validateEmail, validatePhone } from "@/features/checkout/utils"

@@ -1,5 +1,5 @@
 import { Hanko } from "@/features/shell/Hanko"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { Layout } from "@/features/shell/Layout"
 import { PageHead } from "@/shared/components/PageHead"
 import { photos } from "@/features/products/products"

@@ -1,5 +1,5 @@
 import { useId, useMemo, useState } from "react"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { Layout } from "@/features/shell/Layout"
 import { PageHead } from "@/shared/components/PageHead"
 import { type FaqItem, faqGroups } from "@/features/content/content"

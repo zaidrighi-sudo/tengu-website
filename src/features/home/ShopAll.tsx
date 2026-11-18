@@ -1,4 +1,4 @@
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { products } from "@/features/products/products"
 import { t } from "@/shared/i18n"
 

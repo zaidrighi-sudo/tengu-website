@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react"
 import { Hanko } from "@/features/shell/Hanko"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { photos } from "@/features/products/products"
 import { localized, siteSettings } from "@/features/site-settings/data"
 import { t } from "@/shared/i18n"

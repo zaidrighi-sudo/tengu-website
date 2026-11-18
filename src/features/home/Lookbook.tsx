@@ -1,4 +1,4 @@
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { SectionHeading } from "@/features/shell/SectionHeading"
 import { photos } from "@/features/products/products"
 import { t, tr } from "@/shared/i18n"

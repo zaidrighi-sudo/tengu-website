@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from "react"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { cn } from "@/shared/utils/cn"
 import {
   FACETS,

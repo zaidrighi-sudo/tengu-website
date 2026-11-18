@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { ProductCard } from "@/features/products/ProductCard"
 import { SectionHeading } from "@/features/shell/SectionHeading"
 import { useCart } from "@/features/cart/CartContext"

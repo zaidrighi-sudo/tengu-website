@@ -1,4 +1,4 @@
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { localized, siteSettings } from "@/features/site-settings/data"
 import { t } from "@/shared/i18n"
 import { StoreImage } from "@/shared/components/StoreImage"

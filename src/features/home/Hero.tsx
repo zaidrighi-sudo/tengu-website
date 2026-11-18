@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { localized, siteSettings } from "@/features/site-settings/data"
 import { photos } from "@/features/products/products"
 import { t, tr } from "@/shared/i18n"

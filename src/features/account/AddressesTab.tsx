@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react"
 import { AddressFields } from "@/features/checkout/AddressFields"
 import { CheckField, ErrorSummary, TextField } from "@/features/checkout/Field"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { type SavedAddress, type User, useAuth } from "@/features/auth/AuthContext"
 import { wilayaDisplay } from "@/features/delivery/algeria"
 import { type Address, emptyAddress, validateAddress } from "@/features/checkout/utils"

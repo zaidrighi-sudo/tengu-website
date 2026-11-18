@@ -6,7 +6,7 @@ import {
   TextField,
 } from "@/features/checkout/Field"
 import { Hanko } from "@/features/shell/Hanko"
-import { Icon } from "@/store/components/Icon"
+import { Icon } from "@/shared/components/Icon"
 import { TenguMark } from "@/features/shell/TenguMark"
 import { useAuth } from "@/features/auth/AuthContext"
 import { photos } from "@/features/products/products"

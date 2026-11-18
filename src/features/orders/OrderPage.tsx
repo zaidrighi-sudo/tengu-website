@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Hanko } from "@/features/shell/Hanko"
-import { Icon, type IconName } from "@/store/components/Icon"
+import { Icon, type IconName } from "@/shared/components/Icon"
 import { Layout } from "@/features/shell/Layout"
 import { useAuth } from "@/features/auth/AuthContext"
 import { wilayaDisplay } from "@/features/delivery/algeria"
