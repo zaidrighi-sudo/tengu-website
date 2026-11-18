@@ -8,6 +8,8 @@
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "format": "oxfmt",
+    "verify": "node scripts/check-imports.mjs",
+    "orphans": "node scripts/orphans.mjs",
     "migrate:variants": "node scripts/migrate-product-variants.mjs",
     "rehash:passwords": "node scripts/rehash-passwords.mjs"
   },
