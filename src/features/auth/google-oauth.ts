@@ -13,10 +13,15 @@
  *    - GOOGLE_CALLBACK_URL=https://yourdomain.com/api/auth/google/callback
  */
 
+import { siteUrl } from '@/shared/site-url'
+
 export const googleOAuthConfig = {
   clientId: process.env.GOOGLE_CLIENT_ID || '',
   clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-  callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback',
+  // Fall back to the deploy's own origin instead of hardcoding localhost, so
+  // Google sign-in keeps working when only the domain changes.
+  callbackUrl:
+    process.env.GOOGLE_CALLBACK_URL || `${siteUrl()}/api/auth/google/callback`,
   scope: [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
