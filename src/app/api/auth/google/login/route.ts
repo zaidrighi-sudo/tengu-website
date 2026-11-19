@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { googleOAuthConfig, getGoogleAuthUrl } from '@/features/auth/google-oauth'
+import { getGoogleAuthUrl, getGoogleCallbackUrl } from '@/features/auth/google-oauth'
 
 function generateState(): string {
   const array = new Uint8Array(32)
@@ -8,11 +8,11 @@ function generateState(): string {
   return Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('')
 }
 
-async function handleOAuthInit(next?: string) {
+async function handleOAuthInit(requestUrl: string, next?: string) {
   const state = generateState()
 
   // Build auth URL with next parameter in state
-  const authUrl = getGoogleAuthUrl(state)
+  const authUrl = getGoogleAuthUrl(state, getGoogleCallbackUrl(requestUrl))
 
   // Add next URL to the callback URL
   const url = new URL(authUrl)
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url)
     const next = url.searchParams.get('next') || '/'
 
-    const authUrl = await handleOAuthInit(next)
+    const authUrl = await handleOAuthInit(request.url, next)
     return redirect(authUrl)
   } catch (error) {
     // Re-throw NEXT_REDIRECT errors (they're not real errors, just how Next.js does redirects)
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
   try {
     const { next } = await request.json()
 
-    const authUrl = await handleOAuthInit(next)
+    const authUrl = await handleOAuthInit(request.url, next)
 
     return Response.json({ url: authUrl })
   } catch (error) {

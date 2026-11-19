@@ -2,7 +2,12 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { connectDB, User } from '@/shared/mongodb/models'
 import { createAppAuth } from '@/features/auth/app-auth'
-import { googleOAuthConfig, getGoogleAuthUrl, type GoogleUserInfo } from '@/features/auth/google-oauth'
+import {
+  googleOAuthConfig,
+  getGoogleAuthUrl,
+  getGoogleCallbackUrl,
+  type GoogleUserInfo,
+} from '@/features/auth/google-oauth'
 
 // Generate a random state for CSRF protection
 function generateState(): string {
@@ -39,7 +44,7 @@ export async function GET(request: Request) {
         client_secret: googleOAuthConfig.clientSecret,
         code,
         grant_type: 'authorization_code',
-        redirect_uri: googleOAuthConfig.callbackUrl,
+        redirect_uri: getGoogleCallbackUrl(request.url),
       }),
     })
 
@@ -123,7 +128,7 @@ export async function GET(request: Request) {
 // Also export a route handler for initiating Google OAuth
 export async function POST(request: Request) {
   const state = generateState()
-  const authUrl = getGoogleAuthUrl(state)
+  const authUrl = getGoogleAuthUrl(state, getGoogleCallbackUrl(request.url))
 
   // Store state in cookie for verification (optional, for CSRF protection)
   // Use secure cookies only in production (HTTPS), not on localhost (HTTP)

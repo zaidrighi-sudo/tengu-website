@@ -13,15 +13,9 @@
  *    - GOOGLE_CALLBACK_URL=https://yourdomain.com/api/auth/google/callback
  */
 
-import { siteUrl } from '@/shared/site-url'
-
 export const googleOAuthConfig = {
   clientId: process.env.GOOGLE_CLIENT_ID || '',
   clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-  // Fall back to the deploy's own origin instead of hardcoding localhost, so
-  // Google sign-in keeps working when only the domain changes.
-  callbackUrl:
-    process.env.GOOGLE_CALLBACK_URL || `${siteUrl()}/api/auth/google/callback`,
   scope: [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
@@ -31,10 +25,33 @@ export const googleOAuthConfig = {
   userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
 }
 
-export function getGoogleAuthUrl(state: string): string {
+/**
+ * The `redirect_uri` must be byte-for-byte identical in the authorization
+ * request and the token exchange, and it must be whitelisted in Google Cloud
+ * Console. Deriving it from the incoming request origin means it follows the
+ * deployment domain (localhost, preview, production, custom domain) instead of
+ * a stale environment variable that silently breaks sign-in after a deploy.
+ *
+ * `GOOGLE_CALLBACK_URL` is still honoured when its origin matches the current
+ * request; a mismatching value (e.g. an old domain) is ignored on purpose.
+ */
+export function getGoogleCallbackUrl(requestUrl: string): string {
+  const origin = new URL(requestUrl).origin
+  const configured = process.env.GOOGLE_CALLBACK_URL
+  if (configured) {
+    try {
+      if (new URL(configured).origin === origin) return configured
+    } catch {
+      // Malformed override: fall through to the derived URL.
+    }
+  }
+  return `${origin}/api/auth/google/callback`
+}
+
+export function getGoogleAuthUrl(state: string, callbackUrl: string): string {
   const params = new URLSearchParams({
     client_id: googleOAuthConfig.clientId,
-    redirect_uri: googleOAuthConfig.callbackUrl,
+    redirect_uri: callbackUrl,
     response_type: 'code',
     scope: googleOAuthConfig.scope.join(' '),
     access_type: 'offline',
