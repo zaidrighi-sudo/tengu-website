@@ -255,8 +255,9 @@ export async function changePassword(input: { current: string; next: string }): 
 
 export async function loginWithGoogle(input: { next?: string }): Promise<{ ok: true; redirectTo: string } | { ok: false; message: string }> {
   const next = input?.next || '/'
-  // Return the Google OAuth login URL - the client will redirect to it
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  const redirectTo = `${baseUrl}/api/auth/google/login?next=${encodeURIComponent(next)}`
-  return { ok: true, redirectTo }
+  // Relative URL on purpose: the browser resolves it against whatever origin
+  // the customer is on (production, preview, custom domain, localhost). An
+  // absolute URL built from NEXT_PUBLIC_SITE_URL sent customers to a stale
+  // domain that answered 404 whenever the deploy URL changed.
+  return { ok: true, redirectTo: `/api/auth/google/login?next=${encodeURIComponent(next)}` }
 }
