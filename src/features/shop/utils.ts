@@ -1,12 +1,13 @@
 import {
   type Product,
-  priceBands,
   products,
   sizeOptions,
   shopCategories,
   colorOptions,
   fitOptions,
 } from "@/features/products/products"
+import { t } from "@/shared/i18n"
+import { formatPrice } from "@/shared/utils/format"
 
 export type Facet = "category" | "size" | "color" | "price" | "fit"
 
@@ -15,12 +16,28 @@ export type Filters = {
   size: string[]
   color: string[]
   fit: string[]
-  /** One price band id, or null for any price. */
-  price: string | null
+  /** Most the customer wants to spend, in dinars, or null for any price. */
+  priceMax: number | null
   newOnly: boolean
   saleOnly: boolean
   /** Free-text search from the header search box or `?search=`. */
   search: string
+}
+
+/** Ceiling for the hand-typed budget: keeps typos and URLs sane. */
+export const MAX_PRICE_LIMIT = 10_000_000
+
+/**
+ * Turns a typed budget (or a value from the URL) into whole dinars.
+ * Empty, zero and junk all mean "no limit", so clearing the field resets it.
+ */
+export function parsePrice(value: string | number | null | undefined): number | null {
+  if (value === null || value === undefined) return null
+  const digits = String(value).replace(/[\s,]/g, "")
+  if (!digits) return null
+  const amount = Number(digits)
+  if (!Number.isFinite(amount) || amount <= 0) return null
+  return Math.min(Math.floor(amount), MAX_PRICE_LIMIT)
 }
 
 export type SortKey = "featured" | "newest" | "price-asc" | "price-desc" | "name"
@@ -43,7 +60,7 @@ export const EMPTY_FILTERS: Filters = {
   size: [],
   color: [],
   fit: [],
-  price: null,
+  priceMax: null,
   newOnly: false,
   saleOnly: false,
   search: "",
@@ -78,7 +95,7 @@ export function parseHash(hash: string): ShopQuery {
     (query.get(key)?.split(",") ?? []).filter((value) =>
       ALLOWED[key].includes(value),
     )
-  const price = query.get("price")
+  const maxPrice = parsePrice(query.get("maxPrice") ?? query.get("price"))
   const sort = query.get("sort") as SortKey | null
   const search = (query.get("search") ?? "").replace(/\s+/g, " ").trim().slice(0, 80)
   return {
@@ -87,7 +104,7 @@ export function parseHash(hash: string): ShopQuery {
       size: list("size"),
       color: list("color"),
       fit: list("fit"),
-      price: priceBands.some((band) => band.id === price) ? price : null,
+      priceMax: maxPrice,
       newOnly: query.get("new") === "1",
       saleOnly: query.get("sale") === "1",
       search,
@@ -103,7 +120,7 @@ export function toHash(filters: Filters, sort: SortKey) {
   for (const key of ["category", "size", "color", "fit"] as const) {
     if (filters[key].length) query.set(key, filters[key].join(","))
   }
-  if (filters.price) query.set("price", filters.price)
+  if (filters.priceMax !== null) query.set("maxPrice", String(filters.priceMax))
   if (filters.newOnly) query.set("new", "1")
   if (filters.saleOnly) query.set("sale", "1")
   const search = filters.search.trim()
@@ -145,11 +162,7 @@ export function matches(product: Product, filters: Filters) {
     return false
   if (filters.fit.length && !(product.fit && filters.fit.includes(product.fit)))
     return false
-  if (filters.price) {
-    const band = priceBands.find((item) => item.id === filters.price)
-    if (band && (product.price < band.min || product.price > band.max))
-      return false
-  }
+  if (filters.priceMax !== null && product.price > filters.priceMax) return false
   return true
 }
 
@@ -174,11 +187,12 @@ export function sortProducts(list: Product[], sort: SortKey) {
 }
 
 /** How many pieces an option would show, given every *other* active filter. */
-export function optionCount(facet: Facet, value: string, filters: Filters) {
-  const next: Filters = {
-    ...filters,
-    [facet]: facet === "price" ? value : [value],
-  }
+export function optionCount(
+  facet: Exclude<Facet, "price">,
+  value: string,
+  filters: Filters,
+) {
+  const next: Filters = { ...filters, [facet]: [value] }
   return products.filter((product) => matches(product, next)).length
 }
 
@@ -200,9 +214,12 @@ export function activeChips(filters: Filters): Chip[] {
     for (const value of filters[facet])
       chips.push({ facet, value, label: value })
   }
-  if (filters.price) {
-    const band = priceBands.find((item) => item.id === filters.price)
-    if (band) chips.push({ facet: "price", value: band.id, label: band.label })
+  if (filters.priceMax !== null) {
+    chips.push({
+      facet: "price",
+      value: String(filters.priceMax),
+      label: t("Up to {price}", { price: formatPrice(filters.priceMax) }),
+    })
   }
   return chips
 }
@@ -211,7 +228,7 @@ export function removeChip(filters: Filters, chip: Chip): Filters {
   if (chip.facet === "search") return { ...filters, search: "" }
   if (chip.facet === "new") return { ...filters, newOnly: false }
   if (chip.facet === "sale") return { ...filters, saleOnly: false }
-  if (chip.facet === "price") return { ...filters, price: null }
+  if (chip.facet === "price") return { ...filters, priceMax: null }
   return {
     ...filters,
     [chip.facet]: filters[chip.facet].filter((value) => value !== chip.value),
@@ -234,6 +251,6 @@ export function toggleValue(
 
 export function facetSelectedCount(filters: Filters, facet: Facet) {
   return facet === "price"
-    ? Number(filters.price !== null)
+    ? Number(filters.priceMax !== null)
     : filters[facet].length
 }

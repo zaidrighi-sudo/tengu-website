@@ -1,20 +1,22 @@
-import type { CSSProperties } from "react"
+import { type CSSProperties, type FormEvent, useEffect, useState } from "react"
 import {
   colorOptions,
   colorSwatches,
   fitOptions,
-  priceBands,
   shopCategories,
   sizeOptions,
 } from "@/features/products/products"
 import { cn } from "@/shared/utils/cn"
 import {
+  MAX_PRICE_LIMIT,
   type Facet,
   type Filters,
   optionCount,
+  parsePrice,
   toggleValue,
 } from "@/features/shop/utils"
 import { t, tr } from "@/shared/i18n"
+import { formatPrice } from "@/shared/utils/format"
 
 type OptionProps = {
   type: "checkbox" | "radio"
@@ -67,6 +69,83 @@ function Option({
   )
 }
 
+/** Customer-typed budget: pieces above the amount are filtered out. */
+function PriceMaxField({
+  filters,
+  onChange,
+  scope,
+}: {
+  filters: Filters
+  onChange: (next: Filters) => void
+  scope: string
+}) {
+  const [draft, setDraft] = useState(
+    filters.priceMax === null ? "" : String(filters.priceMax),
+  )
+
+  // The budget can also change outside this field: chip removal, Clear all,
+  // or a shared link opened while the panel is mounted.
+  useEffect(() => {
+    setDraft(filters.priceMax === null ? "" : String(filters.priceMax))
+  }, [filters.priceMax])
+
+  const nextPrice = parsePrice(draft)
+  // An empty field means "no limit"; typing 0 (or junk) does too, but it still
+  // needs an Apply so the field can be normalised back to empty.
+  const dirty =
+    nextPrice !== filters.priceMax || (draft.trim() !== "" && nextPrice === null)
+  const inputId = `${scope}-price-max`
+  const hintId = `${scope}-price-hint`
+
+  function apply(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setDraft(nextPrice === null ? "" : String(nextPrice))
+    if (dirty) onChange({ ...filters, priceMax: nextPrice })
+  }
+
+  return (
+    <form className="price-set" onSubmit={apply}>
+      <label className="price-set-label" htmlFor={inputId}>
+        {t("Your maximum price")}
+      </label>
+      <div className="price-set-input">
+        <input
+          id={inputId}
+          type="number"
+          inputMode="numeric"
+          min={0}
+          max={MAX_PRICE_LIMIT}
+          step={1}
+          value={draft}
+          placeholder={t("e.g. 6000")}
+          aria-describedby={hintId}
+          onChange={(event) => setDraft(event.target.value)}
+        />
+        <span className="price-set-unit">{t("DA")}</span>
+      </div>
+      <p className="price-set-hint" id={hintId}>
+        {filters.priceMax !== null
+          ? t("Showing pieces up to {price}", { price: formatPrice(filters.priceMax) })
+          : t("Only pieces within your budget are shown.")}
+      </p>
+      <div className="price-set-actions">
+        <button type="submit" className="price-set-apply" disabled={!dirty}>
+          {t("Apply")}
+        </button>
+        {filters.priceMax !== null && (
+          <button
+            type="button"
+            className="price-set-clear"
+            onClick={() => onChange({ ...filters, priceMax: null })}
+          >
+            {t("Any price")}
+          </button>
+        )}
+      </div>
+    </form>
+  )
+}
+
 /** The controls for one facet. Shared by the desktop menus and the mobile drawer. */
 export function FacetFields({
   facet,
@@ -81,30 +160,7 @@ export function FacetFields({
   scope: string
 }) {
   if (facet === "price") {
-    return (
-      <div className="opt-list">
-        <Option
-          type="radio"
-          name={`${scope}-price`}
-          label={t("Any price")}
-          variant="row"
-          checked={filters.price === null}
-          onChange={() => onChange({ ...filters, price: null })}
-        />
-        {priceBands.map((band) => (
-          <Option
-            key={band.id}
-            type="radio"
-            name={`${scope}-price`}
-            label={tr(band.label)}
-            variant="row"
-            checked={filters.price === band.id}
-            count={optionCount("price", band.id, filters)}
-            onChange={() => onChange({ ...filters, price: band.id })}
-          />
-        ))}
-      </div>
-    )
+    return <PriceMaxField filters={filters} onChange={onChange} scope={scope} />
   }
 
   if (facet === "size") {

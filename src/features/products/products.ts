@@ -84,13 +84,6 @@ export function updateColorsFromCMS() {
   }
 }
 
-export const priceBands = [
-  { id: "0-3999", label: "Under 4,000 DA", min: 0, max: 3999 },
-  { id: "4000-5499", label: "4,000 – 5,499 DA", min: 4000, max: 5499 },
-  { id: "5500-6999", label: "5,500 – 6,999 DA", min: 5500, max: 6999 },
-  { id: "7000-99999", label: "7,000 DA and up", min: 7000, max: 99999 },
-]
-
 export const photos = {
   hero: U("1677538537484-324385aff147", 2000, 85),
   // Lookbook: one wide, one tall, one mid, one small.
