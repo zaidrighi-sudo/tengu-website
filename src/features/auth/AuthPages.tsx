@@ -138,9 +138,70 @@ function Heading({ children, intro }: { children: string; intro: string }) {
   )
 }
 
+/* ---------- Google OAuth (sign in + sign up share the same flow) ---------- */
+function GoogleAuthButton({ next, disabled }: { next: string; disabled?: boolean }) {
+  const { loginWithGoogle } = useAuth()
+  const [redirecting, setRedirecting] = useState(false)
+
+  const handleClick = async () => {
+    setRedirecting(true)
+    const result = await loginWithGoogle(next)
+    if (!result.ok) setRedirecting(false)
+  }
+
+  const isBusy = Boolean(disabled || redirecting)
+
+  return (
+    <button
+      type="button"
+      className="btn btn-outline btn-lg auth-google"
+      onClick={handleClick}
+      disabled={isBusy}
+      aria-busy={isBusy}
+    >
+      {isBusy ? (
+        <>
+          <span role="status">{t("Redirecting…")}</span>
+          <span className="co-spinner" aria-hidden="true" />
+        </>
+      ) : (
+        <>
+          <svg className="google-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="#4285F4"
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+            />
+            <path
+              fill="#EA4335"
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+            />
+          </svg>
+          {t("Continue with Google")}
+        </>
+      )}
+    </button>
+  )
+}
+
+function GoogleAuthDivider() {
+  return (
+    <div className="auth-divider">
+      <span>{t("or continue with")}</span>
+    </div>
+  )
+}
+
 /* ---------- Sign in ---------- */
 function LoginForm({ next, suffix, defaultEmail }: { next: string; suffix: string; defaultEmail: string }) {
-  const { login, loginWithGoogle } = useAuth()
+  const { login } = useAuth()
   const form = useRef<HTMLFormElement>(null)
   const alert = useRef<HTMLDivElement>(null)
   const [email, setEmail] = useState(defaultEmail)
@@ -169,12 +230,6 @@ function LoginForm({ next, suffix, defaultEmail }: { next: string; suffix: strin
       requestAnimationFrame(() => alert.current?.focus())
     }
     // AuthContext.login handles the redirect (including next parameter for customer login)
-  }
-
-  const handleGoogleLogin = async () => {
-    setBusy(true)
-    setFailure("")
-    await loginWithGoogle(next)
   }
 
   return (
@@ -228,45 +283,8 @@ function LoginForm({ next, suffix, defaultEmail }: { next: string; suffix: strin
           )}
         </button>
       </form>
-      <div className="auth-divider">
-        <span>{t("or continue with")}</span>
-      </div>
-      <button
-        type="button"
-        className="btn btn-outline btn-lg auth-google"
-        onClick={handleGoogleLogin}
-        disabled={busy}
-        aria-busy={busy}
-      >
-        {busy ? (
-          <>
-            <span role="status">{t("Redirecting…")}</span>
-            <span className="co-spinner" aria-hidden="true" />
-          </>
-        ) : (
-          <>
-            <svg className="google-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                fill="#4285F4"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              />
-              <path
-                fill="#34A853"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-              />
-              <path
-                fill="#EA4335"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              />
-            </svg>
-            {t("Continue with Google")}
-          </>
-        )}
-      </button>
+      <GoogleAuthDivider />
+      <GoogleAuthButton next={next} disabled={busy} />
       <p className="auth-switch">
         {t("New to Tengu?")} <a href={`#/register${suffix}`}>{t("Create an account")}</a>
       </p>
@@ -421,6 +439,8 @@ function RegisterForm({ next, defaultEmail }: { next: string; defaultEmail: stri
           {t("By creating an account you agree to our terms of sale and privacy notice.")}
         </p>
       </form>
+      <GoogleAuthDivider />
+      <GoogleAuthButton next={next} disabled={busy} />
       <p className="auth-switch">
         {t("Already have an account?")} <a href="#/login">{t("Sign in")}</a>
       </p>
