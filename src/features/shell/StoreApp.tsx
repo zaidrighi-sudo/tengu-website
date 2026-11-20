@@ -21,7 +21,9 @@ export default function StoreApp({ data, user }: { data: StoreData | null; user:
   const hydrated = useRef(false)
   if (!hydrated.current) {
     hydrated.current = true
-    if (data && data.products.length > 0) {
+    // Always hydrate: categories drive the header nav even when the catalogue
+    // has no products yet.
+    if (data) {
       hydrateStore(data)
     }
   }

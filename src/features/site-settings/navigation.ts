@@ -6,15 +6,42 @@ export type NavLink = {
   mega?: boolean
 }
 
-export const primaryLinks: NavLink[] = [
-  { label: "Shop", href: "#/shop", mega: true },
-  { label: "Hoodies", href: "#/shop?category=Hoodies" },
-  { label: "Joggers", href: "#/shop?category=Joggers" },
-  { label: "New Drop", href: "#/shop?new=1" },
-  { label: "Sale", href: "#/shop?sale=1" },
-  { label: "Lookbook", href: "#/lookbook" },
-  { label: "About", href: "#/about" },
-]
+/** A CMS category as far as the navigation bar cares. */
+export type NavCategory = { name: string; showInNav?: boolean }
+
+// Dynamic primaryLinks generated from CMS categories with showInNav === true.
+// Populated by `hydrateStore`; starts empty so nothing renders before hydration.
+export const primaryLinks: NavLink[] = []
+
+/**
+ * Build the primary navigation from CMS categories flagged showInNav.
+ * Falls back to the storefront's default links while the CMS has no categories.
+ */
+export function buildPrimaryLinks(categories: NavCategory[]): NavLink[] {
+  // No categories in the CMS yet: keep the storefront's default links.
+  if (categories.length === 0) {
+    return [
+      { label: "Shop", href: "#/shop", mega: true },
+      { label: "New Drop", href: "#/shop?new=1" },
+      { label: "Sale", href: "#/shop?sale=1" },
+      { label: "Lookbook", href: "#/lookbook" },
+      { label: "About", href: "#/about" },
+    ]
+  }
+
+  // Once the CMS has categories, the nav shows exactly those flagged for it.
+  return categories
+    .filter((category) => category.showInNav !== false)
+    .map((category) => ({
+      label: category.name,
+      href: `#/shop?category=${encodeURIComponent(category.name)}`,
+    }))
+}
+
+/** Replace `primaryLinks` in place. Called from `hydrateStore`. */
+export function setPrimaryLinks(categories: NavCategory[]): void {
+  primaryLinks.splice(0, primaryLinks.length, ...buildPrimaryLinks(categories))
+}
 
 export const megaLinks = [
   { label: "Shop all", href: "#/shop" },

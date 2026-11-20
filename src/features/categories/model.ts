@@ -17,6 +17,8 @@ export interface ICategory extends Document {
   tileImage?: mongoose.Types.ObjectId
   tileHoverImage?: mongoose.Types.ObjectId
   tileAlt?: string
+  /** Whether this category appears in the storefront top navigation bar. */
+  showInNav: boolean
   /** Custom size chart for this category (optional) */
   sizeChart?: ISizeRange[]
   createdAt: Date
@@ -35,6 +37,7 @@ const CategorySchema = new Schema<ICategory>({
   name: { type: String, required: true, unique: true, index: true },
   slug: { type: String, required: true, unique: true, index: true },
   sortOrder: { type: Number, default: 0 },
+  showInNav: { type: Boolean, default: true },
   tileImage: { type: Schema.Types.ObjectId, ref: 'Media' },
   tileHoverImage: { type: Schema.Types.ObjectId, ref: 'Media' },
   tileAlt: { type: String },

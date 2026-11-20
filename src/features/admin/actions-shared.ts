@@ -123,6 +123,7 @@ export type LeanCategory = Omit<ICategory, 'tileImage' | 'tileHoverImage' | 'siz
   tileImage?: { _id: string; url: string } | null
   tileHoverImage?: { _id: string; url: string } | null
   sizeChart?: LeanSizeRange[]
+  showInNav: boolean
 }
 
 export type LeanOrder = Omit<IOrder, 'user' | 'lines'> & {

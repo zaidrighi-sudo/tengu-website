@@ -45,7 +45,7 @@ export async function createCategory(data: Record<string, unknown>) {
     ...data,
     name,
     slug: data.slug ? String(data.slug) : slugify(name),
-    sortOrder: Number(data.sortOrder) || 0,
+    showInNav: data.showInNav !== undefined ? Boolean(data.showInNav) : undefined,
     tileImage: data.tileImage ? toObjectId(data.tileImage as string) : undefined,
     tileHoverImage: data.tileHoverImage ? toObjectId(data.tileHoverImage as string) : undefined,
     sizeChart: data.sizeChart ? JSON.parse(data.sizeChart as string) : undefined,
@@ -60,7 +60,7 @@ export async function updateCategory(id: string, data: Record<string, unknown>) 
   await ensureDB()
   const updateData: Record<string, unknown> = {
     ...data,
-    sortOrder: data.sortOrder !== undefined ? Number(data.sortOrder) : undefined,
+    showInNav: data.showInNav !== undefined ? Boolean(data.showInNav) : undefined,
     tileImage: data.tileImage ? toObjectId(data.tileImage as string) : (data.tileImage === null ? null : undefined),
     tileHoverImage: data.tileHoverImage ? toObjectId(data.tileHoverImage as string) : (data.tileHoverImage === null ? null : undefined),
     sizeChart: data.sizeChart !== undefined ? (data.sizeChart ? JSON.parse(data.sizeChart as string) : []) : undefined,

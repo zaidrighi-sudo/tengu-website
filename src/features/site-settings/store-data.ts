@@ -55,14 +55,14 @@ async function loadStoreData(): Promise<StoreData> {
     // Variant gallery: one image per colorway, populated with its media file.
     const gallery: NonNullable<ProductType['images']> = Array.isArray(doc.images)
       ? doc.images
-          .map((entry: any) => ({
-            url: mediaUrl(entry?.image) ?? '',
-            color: typeof entry?.color === 'string' ? entry.color : '',
-            colorHex: entry?.colorHex ?? undefined,
-            order: Number(entry?.order) || 0,
-            isMain: Boolean(entry?.isMain),
-          }))
-          .filter((entry: any) => entry.url)
+        .map((entry: any) => ({
+          url: mediaUrl(entry?.image) ?? '',
+          color: typeof entry?.color === 'string' ? entry.color : '',
+          colorHex: entry?.colorHex ?? undefined,
+          order: Number(entry?.order) || 0,
+          isMain: Boolean(entry?.isMain),
+        }))
+        .filter((entry: any) => entry.url)
       : []
 
     // Legacy products only have image/hoverImage. Fold them into the gallery.
@@ -130,6 +130,8 @@ async function loadStoreData(): Promise<StoreData> {
     products,
     categories: categoryResult.map((doc: any) => ({
       name: doc.name,
+      sortOrder: Number(doc.sortOrder) || 0,
+      showInNav: doc.showInNav !== false,
       tileImage: mediaUrl(doc.tileImage),
       tileHoverImage: mediaUrl(doc.tileHoverImage),
       tileAlt: doc.tileAlt ?? undefined,

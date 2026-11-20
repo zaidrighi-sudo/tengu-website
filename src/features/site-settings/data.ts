@@ -1,6 +1,6 @@
 import { type Zone, ZONES } from "@/features/delivery/algeria"
 import { COMMUNE_FEES, communeFeeKey } from "@/features/delivery/communes"
-import { setFreeShippingThreshold, setLoyaltyFreeDeliveryThreshold, socials } from "@/features/site-settings/navigation"
+import { setFreeShippingThreshold, setLoyaltyFreeDeliveryThreshold, socials, setPrimaryLinks } from "@/features/site-settings/navigation"
 import {
   type Category,
   type Product,
@@ -35,10 +35,12 @@ export type StoreData = {
   products: Product[]
   categories: {
     name: string;
+    sortOrder?: number;
     tileImage?: string;
     tileHoverImage?: string;
     tileAlt?: string;
     sizeChart?: CMSSizeRange[]
+    showInNav?: boolean;
   }[]
   zones: Zone[]
   /** Sparse per-commune courier fee overrides; win over the zone fees once hydrated. */
@@ -145,8 +147,12 @@ export function hydrateStore(data: StoreData) {
       image: category.tileImage as string,
       hoverImage: category.tileHoverImage || (category.tileImage as string),
       alt: category.tileAlt || category.name,
+      showInNav: category.showInNav !== false,
     }))
   categoryTiles.splice(0, categoryTiles.length, ...tiles)
+
+  // Top navigation comes from CMS categories flagged "Show in top navigation".
+  setPrimaryLinks(data.categories)
 
   for (const zone of data.zones) ZONES[zone.id] = zone
   // Sparse commune overrides: replace the map wholesale.

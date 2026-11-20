@@ -78,7 +78,7 @@ export default async function AdminCategoriesPage({
                 <tr>
                   <th>NAME</th>
                   <th>SLUG</th>
-                  <th style={{ textAlign: "center" }}>SORT ORDER</th>
+                  <th style={{ textAlign: "center" }}>IN NAV</th>
                   <th>TILE BANNER</th>
                   <th style={{ width: "90px", textAlign: "center" }}>ACTIONS</th>
                 </tr>
@@ -94,8 +94,8 @@ export default async function AdminCategoriesPage({
                     <td style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--admin-muted)" }}>
                       /{category.slug}
                     </td>
-                    <td style={{ textAlign: "center", fontFamily: "var(--font-mono)" }}>
-                      {category.sortOrder || 0}
+                    <td style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: category.showInNav !== false ? "#ffffff" : "var(--admin-subtle)" }}>
+                      {category.showInNav !== false ? "YES" : "—"}
                     </td>
                     <td>
                       {category.tileImage ? (

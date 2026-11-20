@@ -50,7 +50,7 @@ async function EditCategoryForm({ category }: { category: LeanCategory }) {
     "use server"
     await updateCategory(String(category._id), {
       name: formData.get("name") as string,
-      sortOrder: Number(formData.get("sortOrder")) || 0,
+      showInNav: formData.get("showInNav") !== null,
       tileImage: formData.get("tileImage") as string || undefined,
       tileHoverImage: formData.get("tileHoverImage") as string || undefined,
       tileAlt: formData.get("tileAlt") as string || undefined,
@@ -71,10 +71,17 @@ async function EditCategoryForm({ category }: { category: LeanCategory }) {
           <input id="name" name="name" type="text" defaultValue={category.name} required className="admin-field-input" placeholder="Category name" />
         </div>
 
-        <div className="admin-field">
-          <label htmlFor="sortOrder" className="admin-field-label">Sort Order</label>
-          <input id="sortOrder" name="sortOrder" type="number" min="0" step="1" defaultValue={Number(category.sortOrder) || 0} className="admin-field-input" style={{ maxWidth: "12rem" }} />
-          <p style={{ fontSize: "0.6875rem", color: "var(--admin-muted)", margin: "0.25rem 0 0" }}>Lower numbers appear first in storefront navigation</p>
+        <div className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: "0.75rem" }}>
+          <input
+            id="showInNav"
+            name="showInNav"
+            type="checkbox"
+            defaultChecked={category.showInNav !== false}
+            style={{ width: "1.25rem", height: "1.25rem", accentColor: "#ffffff" }}
+          />
+          <label htmlFor="showInNav" className="admin-field-label" style={{ margin: 0, fontSize: "0.75rem", color: "#ffffff" }}>
+            Show in top navigation
+          </label>
         </div>
 
         <ImageUploadField

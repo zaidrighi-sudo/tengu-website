@@ -105,6 +105,7 @@ export type Category = {
   image: string
   hoverImage: string
   alt: string
+  showInNav?: boolean
 }
 
 /** Home category tiles (categories that have a photo). Filled from the CMS. */
