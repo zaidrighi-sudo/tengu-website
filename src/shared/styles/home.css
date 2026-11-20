@@ -69,10 +69,29 @@
 }
 
 .hero-title {
+  /* The wordmark is Latin and split into per-letter spans: force LTR so RTL
+     pages keep the T-E-N-G-U order instead of mirroring it. */
+  direction: ltr;
   font-size: var(--text-display);
   letter-spacing: var(--tracking-display);
   line-height: var(--leading-none);
   margin-inline-start: -0.03em;
+}
+
+[dir="rtl"] .hero-title {
+  /* The global RTL rule zeroes letter-spacing for Arabic script; the Latin
+     wordmark still needs its tight tracking or it wraps onto two lines. */
+  letter-spacing: var(--tracking-display) !important;
+  /* Anton ships a single weight; the Arabic 800 rule would fake-bold it wider. */
+  font-weight: 400;
+  text-align: right;
+}
+
+[dir="rtl"] .hero-letter {
+  /* The universal RTL reset also hits each letter span; restore the tracking
+     explicitly (inherit resolves to `normal` here because the reset applies
+     to the h1 too). */
+  letter-spacing: var(--tracking-display) !important;
 }
 
 .hero-letter {
