@@ -317,11 +317,8 @@
 }
 
 /* ---------- Right-to-left (Arabic) ---------- */
-:root[dir="rtl"] {
-  --font-display: var(--font-ar);
-  --font-sans: var(--font-ar);
-  --font-mono: var(--font-ar);
-}
+/* Arabic keeps the same Latin typefaces as EN/FR; the browser falls back to
+   the system Arabic face for glyphs those fonts do not cover. */
 
 /* Arabic letters join: tracking and tight Latin leading would break them. */
 [dir="rtl"] *,
