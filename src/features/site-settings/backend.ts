@@ -38,6 +38,13 @@ export async function updateSiteSettings(data: Record<string, unknown>) {
   if (data.featuredCategories) {
     updateData.featuredCategories = (data.featuredCategories as string[]).map(id => toObjectId(id))
   }
+  // Curated SHOP mega-menu categories. An empty array clears the selection and
+  // makes the storefront fall back to showing every category.
+  if (Array.isArray(data.megaMenuCategories)) {
+    updateData.megaMenuCategories = (data.megaMenuCategories as string[])
+      .filter(Boolean)
+      .map((id) => toObjectId(id))
+  }
 
   const settings = await SiteSettings.findOneAndUpdate({}, updateData, { upsert: true, new: true })
     .populate("heroImage", "url")

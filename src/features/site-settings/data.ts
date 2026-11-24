@@ -34,6 +34,7 @@ export type LocalizedText = { en?: string | null; fr?: string | null; ar?: strin
 export type StoreData = {
   products: Product[]
   categories: {
+    id?: string;
     name: string;
     sortOrder?: number;
     tileImage?: string;
@@ -63,6 +64,8 @@ export type StoreData = {
     featuredProducts?: string[]
     // Featured categories
     featuredCategories?: string[]
+    // Categories curated for the SHOP mega menu (empty = show all)
+    megaMenuCategories?: string[]
     // Promotional banner
     promoEnabled?: boolean
     promoImage?: string
@@ -156,7 +159,7 @@ export function hydrateStore(data: StoreData) {
   // Footer "Shop" column uses the same categories.
   setFooterShopLinks(data.categories)
   // Shop mega menu: quick links + one image card per category with a tile image.
-  setMegaMenu(data.categories)
+  setMegaMenu(data.categories, data.settings.megaMenuCategories)
 
   for (const zone of data.zones) ZONES[zone.id] = zone
   // Sparse commune overrides: replace the map wholesale.

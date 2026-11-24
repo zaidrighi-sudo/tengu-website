@@ -8,6 +8,7 @@ export type NavLink = {
 
 /** A CMS category as far as the navigation bar cares. */
 export type NavCategory = {
+  id?: string
   name: string
   showInNav?: boolean
   /** Banner/tile image URL used by the shop mega-menu cards. */
@@ -143,10 +144,14 @@ export const megaCards: MegaCard[] = [...defaultMegaCards]
 
 /**
  * Build the shop mega menu from CMS categories: quick links plus one image
- * card per category that has a tile image. Falls back to the default menu
- * while the CMS has no categories, so the storefront never renders empty.
+ * card per category that has a tile image. When the admin curated a subset in
+ * Site Settings, exactly those categories (and their order) are shown.
+ * Falls back to the default menu while the CMS has no categories.
  */
-export function setMegaMenu(categories: NavCategory[]): void {
+export function setMegaMenu(
+  categories: NavCategory[],
+  selectedIds?: string[],
+): void {
   const visible = categories.filter((category) => category.showInNav !== false)
 
   if (visible.length === 0) {
@@ -155,20 +160,27 @@ export function setMegaMenu(categories: NavCategory[]): void {
     return
   }
 
+  // A curated selection wins over the "all categories" default. Matching is by
+  // id so renamed categories keep working; unknown ids are ignored.
+  const picked = (selectedIds ?? [])
+    .map((id) => categories.find((category) => category.id === id))
+    .filter((category): category is NavCategory => Boolean(category))
+  const shown = picked.length > 0 ? picked : visible
+
   megaLinks.splice(
     0,
     megaLinks.length,
     { label: "Shop all", href: "#/shop" },
     { label: "New drop", href: "#/shop?new=1" },
     { label: "Sale", href: "#/shop?sale=1" },
-    ...visible.map((category) => ({
+    ...shown.map((category) => ({
       label: category.name,
       href: categoryHref(category.name),
     })),
   )
 
   // Only categories with an uploaded tile image can fill an image card.
-  const cards: MegaCard[] = visible
+  const cards: MegaCard[] = shown
     .filter((category) => category.tileImage)
     .map((category) => ({
       label: category.name,

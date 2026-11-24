@@ -17,6 +17,8 @@ export interface ISiteSettings extends Document {
   heroCopy: ILocalizedText
   featuredProducts: mongoose.Types.ObjectId[]
   featuredCategories: mongoose.Types.ObjectId[]
+  /** Categories curated for the storefront SHOP mega menu (links + image cards). */
+  megaMenuCategories: mongoose.Types.ObjectId[]
   promoEnabled: boolean
   promoImage?: mongoose.Types.ObjectId
   promoImageAlt?: string
@@ -61,6 +63,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>({
   heroCopy: { type: LocalizedTextSchema, default: () => ({ en: '' }) },
   featuredProducts: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   featuredCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+  megaMenuCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
   promoEnabled: { type: Boolean, default: false },
   promoImage: { type: Schema.Types.ObjectId, ref: 'Media' },
   promoImageAlt: { type: String },

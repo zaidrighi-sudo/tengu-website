@@ -130,6 +130,7 @@ async function loadStoreData(): Promise<StoreData> {
   return {
     products,
     categories: categoryResult.map((doc: any) => ({
+      id: String(doc._id),
       name: doc.name,
       sortOrder: Number(doc.sortOrder) || 0,
       showInNav: doc.showInNav !== false,
@@ -163,6 +164,8 @@ async function loadStoreData(): Promise<StoreData> {
       // Featured products & categories
       featuredProducts: featuredProductIds.length > 0 ? featuredProductIds : undefined,
       featuredCategories: featuredCategoryNames.length > 0 ? featuredCategoryNames : undefined,
+      // Categories curated for the SHOP mega menu (empty = show all)
+      megaMenuCategories: (site?.megaMenuCategories ?? []).map((id: any) => String(id)),
       // Promotional banner
       promoEnabled: site?.promoEnabled ?? false,
       promoImage: mediaUrl(site?.promoImage),

@@ -1,11 +1,14 @@
 import Link from "next/link"
 import { getSiteSettings, updateSiteSettings } from "@/features/site-settings/backend"
+import { getCategoriesPaginated } from "@/features/categories/backend"
+import type { LeanCategory } from "@/features/admin/actions-shared"
 import { ImageUploadField } from "@/features/media/ImageUploadField"
 import "@/shared/styles/global.css"
 import "@/features/admin/admin.css"
 
 export default async function AdminSettingsPage() {
   const settings = await getSiteSettings()
+  const { docs: categories } = await getCategoriesPaginated(1, 500)
 
   return (
     <div className="admin-page">
@@ -28,15 +31,24 @@ export default async function AdminSettingsPage() {
         </div>
       </header>
 
-      <SettingsForm settings={settings} />
+      <SettingsForm settings={settings} categories={categories} />
     </div>
   )
 }
 
-async function SettingsForm({ settings }: { settings: Record<string, unknown> }) {
+async function SettingsForm({
+  settings,
+  categories,
+}: {
+  settings: Record<string, unknown>
+  categories: LeanCategory[]
+}) {
   async function handleSubmit(formData: FormData) {
     "use server"
-    await updateSiteSettings(Object.fromEntries(formData))
+    const payload: Record<string, unknown> = Object.fromEntries(formData)
+    // Multi-select: FormData keeps every checked category under the same name.
+    payload.megaMenuCategories = formData.getAll("megaMenuCategories").map(String)
+    await updateSiteSettings(payload)
   }
 
   const announcementLeft = (settings.announcementLeft as Record<string, string>)?.en || ""
@@ -49,6 +61,9 @@ async function SettingsForm({ settings }: { settings: Record<string, unknown> })
   const phone = (settings.phone as string) || ""
   const instagramUrl = (settings.instagramUrl as string) || ""
   const heroImage = settings.heroImage as { _id?: string; url?: string } | null | undefined
+  const selectedMega = ((settings.megaMenuCategories as unknown[]) ?? []).map((value) =>
+    String(value),
+  )
 
   return (
     <form action={handleSubmit} className="admin-form" noValidate>
@@ -88,6 +103,63 @@ async function SettingsForm({ settings }: { settings: Record<string, unknown> })
           defaultValue={heroImage?._id ? String(heroImage._id) : ""}
           defaultUrl={heroImage?.url ?? ""}
         />
+      </section>
+
+      {/* SHOP Mega Menu Categories */}
+      <section className="admin-form-section">
+        <h2 className="admin-form-section-title">SHOP Menu Categories</h2>
+        <p style={{ color: "var(--admin-subtle)", fontSize: "0.8rem", lineHeight: 1.5, marginBottom: "0.75rem" }}>
+          Choose which categories appear in the SHOP dropdown (links + image cards).
+          Leave everything unchecked to show every category. Pick around 4 so the
+          image row fits neatly. A category needs a <strong>Tile Banner Image</strong> to
+          appear as an image card.
+        </p>
+        {categories.length === 0 ? (
+          <p style={{ color: "var(--admin-subtle)", fontSize: "0.8rem" }}>
+            No categories yet. Add categories first, then choose them here.
+          </p>
+        ) : (
+          <div
+            style={{
+              display: "grid",
+              gap: "0.5rem",
+              gridTemplateColumns: "repeat(auto-fill, minmax(14rem, 1fr))",
+              maxHeight: "20rem",
+              overflowY: "auto",
+              padding: "0.25rem",
+            }}
+          >
+            {categories.map((category) => {
+              const hasImage = Boolean(category.tileImage)
+              return (
+                <label
+                  key={category._id}
+                  style={{
+                    alignItems: "center",
+                    color: "#ffffff",
+                    display: "flex",
+                    fontSize: "0.8rem",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    name="megaMenuCategories"
+                    value={category._id}
+                    defaultChecked={selectedMega.includes(category._id)}
+                    style={{ width: "1rem", height: "1rem", accentColor: "#ffffff" }}
+                  />
+                  <span>
+                    {category.name}
+                    {!hasImage && (
+                      <span style={{ color: "var(--admin-subtle)" }}> (no image)</span>
+                    )}
+                  </span>
+                </label>
+              )
+            })}
+          </div>
+        )}
       </section>
 
       {/* Newsletter */}
