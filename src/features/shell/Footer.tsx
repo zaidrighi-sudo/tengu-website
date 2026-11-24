@@ -1,4 +1,4 @@
-import { footerColumns, socials } from "@/features/site-settings/navigation"
+import { footerColumns, footerShopLinks, socials } from "@/features/site-settings/navigation"
 import { LanguageSwitcher } from "@/shared/i18n/LanguageSwitcher"
 import { Hanko } from "@/features/shell/Hanko"
 import { Icon } from "@/shared/components/Icon"
@@ -30,18 +30,26 @@ export function Footer() {
         </div>
 
         <nav className="footer-columns" aria-label={t("Footer")}>
-          {footerColumns.map((column) => (
-            <div key={column.title}>
-              <h2>{tr(column.title)}</h2>
-              <ul>
-                {column.links.map((link) => (
-                  <li key={link.label}>
-                    <a href={link.href}>{tr(link.label)}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {footerColumns.map((column) => {
+            const links =
+              column.title === "Shop"
+                ? footerShopLinks.length > 0
+                  ? footerShopLinks
+                  : column.links
+                : column.links
+            return (
+              <div key={column.title}>
+                <h2>{tr(column.title)}</h2>
+                <ul>
+                  {links.map((link) => (
+                    <li key={link.label}>
+                      <a href={link.href}>{tr(link.label)}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          })}
         </nav>
       </div>
 

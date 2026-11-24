@@ -1,6 +1,6 @@
 import { type Zone, ZONES } from "@/features/delivery/algeria"
 import { COMMUNE_FEES, communeFeeKey } from "@/features/delivery/communes"
-import { setFreeShippingThreshold, setLoyaltyFreeDeliveryThreshold, socials, setPrimaryLinks } from "@/features/site-settings/navigation"
+import { setFreeShippingThreshold, setLoyaltyFreeDeliveryThreshold, socials, setPrimaryLinks, setFooterShopLinks } from "@/features/site-settings/navigation"
 import {
   type Category,
   type Product,
@@ -153,6 +153,8 @@ export function hydrateStore(data: StoreData) {
 
   // Top navigation comes from CMS categories flagged "Show in top navigation".
   setPrimaryLinks(data.categories)
+  // Footer "Shop" column uses the same categories.
+  setFooterShopLinks(data.categories)
 
   for (const zone of data.zones) ZONES[zone.id] = zone
   // Sparse commune overrides: replace the map wholesale.

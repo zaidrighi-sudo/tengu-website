@@ -43,6 +43,14 @@ export function setPrimaryLinks(categories: NavCategory[]): void {
   primaryLinks.splice(0, primaryLinks.length, ...buildPrimaryLinks(categories))
 }
 
+/** Footer "Shop" column links, built from the same CMS categories. */
+export const footerShopLinks: NavLink[] = []
+
+/** Replace `footerShopLinks` in place. Called from `hydrateStore`. */
+export function setFooterShopLinks(categories: NavCategory[]): void {
+  footerShopLinks.splice(0, footerShopLinks.length, ...buildPrimaryLinks(categories))
+}
+
 export const megaLinks = [
   { label: "Shop all", href: "#/shop" },
   { label: "New drop", href: "#/shop?new=1" },
