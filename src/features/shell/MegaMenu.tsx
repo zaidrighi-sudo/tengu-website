@@ -45,21 +45,23 @@ export function MegaMenu({
           </ul>
         </div>
 
-        <ul className="mega-cards">
-          {megaCards.map((card, index) => (
-            <li key={card.label} style={{ "--i": index } as CSSProperties}>
-              <a className="mega-card" href={card.href} onClick={onNavigate}>
-                <span className="mega-card-media">
-                  <StoreImage className="photo" src={card.image} alt="" />
-                </span>
-                <span className="mega-card-text">
-                  <span className="mega-card-title">{tr(card.label)}</span>
-                  <span className="label">{tr(card.note)}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        {megaCards.length > 0 && (
+          <ul className="mega-cards">
+            {megaCards.map((card, index) => (
+              <li key={card.label} style={{ "--i": index } as CSSProperties}>
+                <a className="mega-card" href={card.href} onClick={onNavigate}>
+                  <span className="mega-card-media">
+                    <StoreImage className="photo" src={card.image} alt={card.note || card.label} />
+                  </span>
+                  <span className="mega-card-text">
+                    <span className="mega-card-title">{tr(card.label)}</span>
+                    {card.note && <span className="label">{tr(card.note)}</span>}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   )
