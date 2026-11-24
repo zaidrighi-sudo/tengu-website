@@ -49,6 +49,35 @@ export type Product = {
   images?: ProductImage[]
   /** Per color + size stock. Empty/absent means stock is not tracked. */
   inventory?: InventoryItem[]
+  /** ISO timestamp of when the product was added to the catalogue. */
+  createdAt?: string
+}
+
+/**
+ * How long a freshly added product stays in "New in", in days.
+ * Override with NEXT_PUBLIC_NEW_IN_DAYS (e.g. 45) without touching code.
+ */
+export const NEW_IN_DAYS = Number(process.env.NEXT_PUBLIC_NEW_IN_DAYS) || 30
+
+const DAY_MS = 24 * 60 * 60 * 1000
+
+/**
+ * A product is "new in" while it is younger than the New In window.
+ * Computed live from `createdAt`, so pieces enter the collection the moment
+ * they are added and drop out automatically once the window passes — with no
+ * cron job and no manual list to maintain. The piece itself is untouched and
+ * keeps living in its own category.
+ */
+export function isNewIn(
+  product: Pick<Product, "createdAt">,
+  now: number = Date.now(),
+): boolean {
+  if (!product.createdAt) return false
+  const added = Date.parse(product.createdAt)
+  if (!Number.isFinite(added)) return false
+  const age = now - added
+  // Tolerate up to a day of clock skew into the future, then expire normally.
+  return age > -DAY_MS && age < NEW_IN_DAYS * DAY_MS
 }
 
 /** Dynamic color swatches from CMS. Filled by hydrateStore. */

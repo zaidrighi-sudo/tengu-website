@@ -1,5 +1,6 @@
 import {
   type Product,
+  isNewIn,
   products,
   sizeOptions,
   shopCategories,
@@ -146,7 +147,7 @@ export function matches(product: Product, filters: Filters) {
     if (!needle.split(/\s+/).every((word) => haystack.includes(word)))
       return false
   }
-  if (filters.newOnly && product.status !== "new") return false
+  if (filters.newOnly && !isNewIn(product)) return false
   if (filters.saleOnly && product.status !== "sale") return false
   if (filters.category.length && !filters.category.includes(product.category))
     return false
@@ -170,11 +171,11 @@ export function sortProducts(list: Product[], sort: SortKey) {
   const copy = [...list]
   switch (sort) {
     case "newest":
-      return copy.sort(
-        (a, b) =>
-          Number(b.status === "new") - Number(a.status === "new") ||
-          products.indexOf(b) - products.indexOf(a),
-      )
+      return copy.sort((a, b) => {
+        const addedAt = (product: Product) =>
+          product.createdAt ? Date.parse(product.createdAt) : 0
+        return addedAt(b) - addedAt(a)
+      })
     case "price-asc":
       return copy.sort((a, b) => a.price - b.price)
     case "price-desc":

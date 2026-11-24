@@ -1,5 +1,5 @@
 import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react"
-import { type Product, type Size, type ColorName } from "@/features/products/products"
+import { type Product, type Size, type ColorName, isNewIn } from "@/features/products/products"
 import { cn } from "@/shared/utils/cn"
 import { formatPrice } from "@/shared/utils/format"
 import { SizeGuide } from "@/features/products/SizeGuide"
@@ -101,7 +101,9 @@ export function ProductCard({
         )}
 
         <div className="product-flags">
-          {product.status === "new" && <span className="tag">{t("New")}</span>}
+          {product.status !== "sale" && isNewIn(product) && (
+            <span className="tag">{t("New")}</span>
+          )}
           {product.status === "sale" && (
             <span className="tag tag-sale">{t("Sale −{discount}%", { discount })}</span>
           )}

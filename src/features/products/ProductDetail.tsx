@@ -3,7 +3,7 @@
 import { type CSSProperties, useMemo, useRef, useState } from "react"
 import { CartProvider, useCart } from "@/features/cart/CartContext"
 import { type StoreData, hydrateStore } from "@/features/site-settings/data"
-import { type Product, type Size } from "@/features/products/products"
+import { type Product, type Size, isNewIn } from "@/features/products/products"
 import { cn } from "@/shared/utils/cn"
 import { formatPrice } from "@/shared/utils/format"
 import { t, tr } from "@/shared/i18n"
@@ -102,7 +102,9 @@ function Detail({ product }: { product: Product }) {
             priority
           />
           <div className="pdp-flags">
-            {product.status === "new" && <span className="tag">{t("New")}</span>}
+            {product.status !== "sale" && isNewIn(product) && (
+              <span className="tag">{t("New")}</span>
+            )}
             {product.status === "sale" && (
               <span className="tag tag-sale">{t("Sale -{discount}%", { discount })}</span>
             )}

@@ -116,6 +116,7 @@ async function loadStoreData(): Promise<StoreData> {
         hoverImage: mediaUrl(doc.hoverImage) ?? gallery[1]?.url ?? mainImage?.url ?? image,
         images: gallery,
         inventory,
+        createdAt: doc.createdAt ? new Date(doc.createdAt).toISOString() : undefined,
       },
     ]
   })
