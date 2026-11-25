@@ -10,9 +10,8 @@ const LETTERS = ["T", "E", "N", "G", "U"]
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <StoreImage className="hero-media photo" src={photos.hero} alt={siteSettings.heroImageAlt || t("Model in a black Tengu hoodie standing in a concrete parking structure")} priority sizes="100vw" />
+      <StoreImage className="hero-media photo" src={photos.hero} alt={siteSettings.heroImageAlt || t("Premium hoodie fabric detail with blurry background")} priority sizes="100vw" />
       <div className="hero-shade" aria-hidden="true" />
-      <div className="grain" aria-hidden="true" />
 
       {/* Decorative vertical kanji for "tengu". */}
       <p className="hero-kanji jp" lang="ja" aria-hidden="true">

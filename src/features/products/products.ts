@@ -114,7 +114,8 @@ export function updateColorsFromCMS() {
 }
 
 export const photos = {
-  hero: U("1677538537484-324385aff147", 2000, 85),
+  // Premium hoodie fabric detail with blurry background (from user)
+  hero: "/store/hero-new.jpg",
   // Lookbook: one wide, one tall, one mid, one small.
   lookA: U("1617869884925-f8f0a51b2374", 1800, 85),
   lookB: U("1631297659547-c9623fef39ee", 1200, 85),

@@ -194,7 +194,7 @@ export const ar: Record<string, string> = {
   "of": "من",
   "(completed)": "(مكتملة)",
   "Shop by category": "تسوّق حسب الفئة",
-  "Model in a black Tengu hoodie standing in a concrete parking structure": "عارض يرتدي هودي Tengu أسود داخل موقف سيارات خرساني",
+  "Premium hoodie fabric detail with blurry background": "تفاصيل نسيج هودي بريميوم مع خلفية ضبابية",
   "AW25 — Mountain Spirit": "AW25 — روح الجبل",
   "Tengu": "Tengu",
   "Heavyweight hoodies and technical joggers. Cut for the street, disciplined like the mountain.": "هوديات ثقيلة وبناطيل رياضية تقنية. مصممة للشارع، وبانضباط الجبل.",
