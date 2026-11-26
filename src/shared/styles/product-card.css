@@ -230,6 +230,9 @@
   border-top: 1px solid var(--color-gray-800);
   bottom: 0;
   inset-inline-start: 0;
+  max-height: 85svh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--space-3);
   position: absolute;
   inset-inline-end: 0;
@@ -262,6 +265,17 @@
   display: grid;
   gap: var(--space-2);
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 390px) {
+  .size-picker {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .size-chip {
+    min-height: 2.5rem;
+    font-size: var(--text-2xs);
+    padding: 0 var(--space-2);
+  }
 }
 
 .size-chip {
