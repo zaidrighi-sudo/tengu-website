@@ -66,20 +66,6 @@ function Detail({ product }: { product: Product }) {
   const colorSoldOut = sizeStock.length > 0 && sizeStock.every((entry) => !entry.available)
   const soldOut = lineSoldOut || colorSoldOut
 
-  const sizeSelector = oneSize ? (
-    <p className="pdp-fit">{t("Size")}: {product.sizes[0]}</p>
-  ) : colors.length > 0 ? (
-    <SizeGuide
-      product={product}
-      color={color}
-      onColorChange={setColor}
-      onPick={(nextSize, nextColor) => {
-        setSize(nextSize)
-        setColor(nextColor)
-      }}
-    />
-  ) : null
-
   const discount =
     product.compareAt && product.compareAt > 0
       ? Math.max(1, Math.round((1 - product.price / product.compareAt) * 100))
@@ -189,7 +175,53 @@ function Detail({ product }: { product: Product }) {
           </div>
         )}
 
-        {sizeSelector}
+        {colors.length > 0 ? (
+          <>
+            {oneSize ? (
+              <p className="pdp-fit">{t("Size")}: {product.sizes[0]}</p>
+            ) : (
+              <div className="pdp-option">
+                <p className="pdp-option-label">{t("Size")}</p>
+                <ul className="pdp-sizes">
+                  {sizeStock.map((entry) => (
+                    <li key={entry.size}>
+                      <button
+                        type="button"
+                        className={cn("pdp-size", size === entry.size && "is-active")}
+                        disabled={!entry.available}
+                        aria-pressed={size === entry.size}
+                        onClick={() => setSize(entry.size)}
+                        title={entry.available ? entry.size : t("Sold out")}
+                      >
+                        {entry.size}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                {!size && !soldOut && (
+                  <p className="pdp-hint" role="status">
+                    {t("Choose a size")}
+                  </p>
+                )}
+              </div>
+            )}
+          </>
+        ) : null}
+
+        {/* Height / weight based size recommendation (optional, below size chips) */}
+        {!oneSize && colors.length > 0 && (
+          <div className="pdp-option">
+            <SizeGuide
+              product={product}
+              color={color}
+              onColorChange={setColor}
+              onPick={(nextSize, nextColor) => {
+                setSize(nextSize)
+                setColor(nextColor)
+              }}
+            />
+          </div>
+        )}
 
         <button
           type="button"
