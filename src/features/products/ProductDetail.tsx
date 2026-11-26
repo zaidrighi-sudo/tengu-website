@@ -219,6 +219,7 @@ function Detail({ product }: { product: Product }) {
                 setSize(nextSize)
                 setColor(nextColor)
               }}
+              showSizePicker={false}
             />
           </div>
         )}

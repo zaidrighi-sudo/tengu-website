@@ -32,6 +32,7 @@ export function SizeGuide({
   color,
   onColorChange,
   className,
+  showSizePicker = true,
 }: {
   product: Product
   onPick: (size: Size, color: ColorName) => void
@@ -39,6 +40,8 @@ export function SizeGuide({
   color?: ColorName
   onColorChange?: (color: ColorName) => void
   className?: string
+  /** Show the size chips picker. Hide when the page already has its own size selector. */
+  showSizePicker?: boolean
 }) {
   const [height, setHeight] = useState<number | "">("")
   const [weight, setWeight] = useState<number | "">("")
@@ -95,13 +98,15 @@ export function SizeGuide({
 
   return (
     <div className={cn("size-guide", className)}>
-      {/* Size Picker - First (always visible) */}
-      <SizePicker
-        product={product}
-        color={selectedColor}
-        onPick={(size) => onPick(size, selectedColor)}
-        className={showGuide && !isAccessory ? "size-picker-compact" : ""}
-      />
+      {/* Size Picker - hidden when the page already has its own size selector */}
+      {showSizePicker && (
+        <SizePicker
+          product={product}
+          color={selectedColor}
+          onPick={(size) => onPick(size, selectedColor)}
+          className={showGuide && !isAccessory ? "size-picker-compact" : ""}
+        />
+      )}
 
       {/* Color Selection - After size */}
       {colors.length > 1 && (
