@@ -17,6 +17,7 @@ import {
   isOneSizeProduct,
   sizesForColor,
 } from "@/features/products/variants"
+import { SizeGuide } from "@/features/products/SizeGuide"
 
 type ProductDetailProps = {
   product: Product
@@ -203,6 +204,19 @@ function Detail({ product }: { product: Product }) {
               </p>
             )}
           </div>
+        )}
+
+        {/* Height / weight based size recommendation */}
+        {colors.length > 0 && !oneSize && (
+          <SizeGuide
+            product={product}
+            color={color}
+            onColorChange={setColor}
+            onPick={(nextSize, nextColor) => {
+              setSize(nextSize)
+              setColor(nextColor)
+            }}
+          />
         )}
 
         <button
