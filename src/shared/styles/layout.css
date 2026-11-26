@@ -310,9 +310,31 @@
   flex-basis: 100%;
 }
 
+/* Phones keep the language toggle in the top bar. Tighten the buttons so the
+   brand, icons and EN / FR / ع still fit side by side on a small screen. */
 @media (max-width: 63.99rem) {
   .nav-actions .lang-switch {
-    display: none;
+    gap: 0.1rem;
+    margin-inline-end: var(--space-1);
+  }
+
+  .nav-actions .lang-btn {
+    font-size: 0.6rem;
+    min-height: 2.25rem;
+    min-width: 2rem;
+    padding: 0 0.3rem;
+  }
+
+  .nav-actions .lang-btn[lang="ar"] {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Very narrow phones: shave a little room from the logo. */
+@media (max-width: 22.5rem) {
+  .tengu-mark {
+    height: 3rem;
+    width: 3rem;
   }
 }
 

@@ -19,7 +19,6 @@ export function Story() {
         sizes="100vw"
       />
       <div className="story-shade" aria-hidden="true" />
-      <div className="grain" aria-hidden="true" />
 
       <div className="story-inner">
         <p className="label" data-reveal>
