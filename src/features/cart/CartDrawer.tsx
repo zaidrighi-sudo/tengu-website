@@ -20,6 +20,7 @@ export function CartDrawer() {
     isOpen,
     setQty,
     remove,
+    removing,
     closeCart,
   } = useCart()
   const panel = useRef<HTMLElement>(null)
@@ -70,7 +71,13 @@ export function CartDrawer() {
           <div className="cart-scroll">
             <ul className="cart-lines">
               {lines.map(({ product, size, color, qty }) => (
-                <li key={lineKey(product.id, size, color)} className="cart-line">
+                <li
+                  key={lineKey(product.id, size, color)}
+                  className={cn(
+                    "cart-line",
+                    removing.includes(lineKey(product.id, size, color)) && "is-removing",
+                  )}
+                >
                   <StoreImage className="photo" src={product.image} alt="" width={96} height={120} />
                   <div className="cart-line-body">
                     <div className="cart-line-top">

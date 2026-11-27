@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react"
 import { type Product, type Size, type ColorName, products } from "@/features/products/products"
@@ -43,6 +44,8 @@ type CartValue = {
   clear: () => void
   setQty: (id: string, size: Size, color: ColorName, qty: number) => void
   remove: (id: string, size: Size, color: ColorName) => void
+  /** Line keys currently fading out before they leave the bag. */
+  removing: string[]
   openCart: () => void
   closeCart: () => void
 }
@@ -104,6 +107,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<Line[]>(readStored)
   const [note, setNoteState] = useState(readNote)
   const [isOpen, setIsOpen] = useState(false)
+  const [removing, setRemoving] = useState<string[]>([])
+  // Pending "fade then delete" timers, keyed by bag line.
+  const removeTimers = useRef(new Map<string, number>())
 
   useEffect(() => {
     try {
@@ -121,12 +127,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [note])
 
+  // Drop pending exit timers if the provider ever goes away.
+  useEffect(() => {
+    const timers = removeTimers.current
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer))
+      timers.clear()
+    }
+  }, [])
+
   const setNote = useCallback(
     (value: string) => setNoteState(value.slice(0, MAX_NOTE)),
     [],
   )
 
   const clear = useCallback(() => {
+    removeTimers.current.forEach((timer) => window.clearTimeout(timer))
+    removeTimers.current.clear()
+    setRemoving([])
     setItems([])
     setNoteState("")
   }, [])
@@ -156,26 +174,43 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [],
   )
 
+  // Fade the row out first, then drop it: deleting instantly makes the list
+  // jump under the pointer. 240ms matches the line-out animation.
+  const remove = useCallback((id: string, size: Size, color: ColorName) => {
+    const key = lineKey(id, size, color)
+    if (removeTimers.current.has(key)) return
+    setRemoving((current) => (current.includes(key) ? current : [...current, key]))
+    // Reduced motion: skip the fade and drop the line straight away.
+    const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 240
+    const timer = window.setTimeout(() => {
+      removeTimers.current.delete(key)
+      setItems((current) =>
+        current.filter((line) => lineKey(line.id, line.size, line.color) !== key),
+      )
+      setRemoving((current) => current.filter((entry) => entry !== key))
+    }, delay)
+    removeTimers.current.set(key, timer)
+  }, [])
+
   const setQty = useCallback((id: string, size: Size, color: ColorName, qty: number) => {
+    // Stepping down past one removes the line, with the same exit animation.
+    if (qty <= 0) {
+      remove(id, size, color)
+      return
+    }
     setItems((current) => {
       const product = products.find((candidate) => candidate.id === id)
       const limit = product ? lineLimit(product, size, color) : 0
       const next = Math.min(qty, limit)
       return next <= 0
-        ? current.filter((line) => !(line.id === id && line.size === size && line.color === color))
+        ? current.filter((line) => lineKey(line.id, line.size, line.color) !== lineKey(id, size, color))
         : current.map((line) =>
             line.id === id && line.size === size && line.color === color
               ? { ...line, qty: next }
               : line,
           )
     })
-  }, [])
-
-  const remove = useCallback((id: string, size: Size, color: ColorName) => {
-    setItems((current) =>
-      current.filter((line) => !(line.id === id && line.size === size && line.color === color)),
-    )
-  }, [])
+  }, [remove])
 
   const value = useMemo<CartValue>(() => {
     // Drop lines whose variant no longer exists or sold out while in the bag.
@@ -199,10 +234,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       add,
       setQty,
       remove,
+      removing,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
     }
-  }, [items, isOpen, note, setNote, clear, add, setQty, remove])
+  }, [items, isOpen, note, setNote, clear, add, setQty, remove, removing])
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }

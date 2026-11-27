@@ -216,10 +216,11 @@ export default function Shop() {
                   ? Array.from({ length: PAGE }, (_, i) => (
                       <ProductCardSkeleton key={i} />
                     ))
-                  : shown.map((product) => (
+                  : shown.map((product, index) => (
                       <ProductCard
                         key={product.id}
                         product={product}
+                        index={Math.min(index, 11)}
                         onAdd={(size, color) => addAndOpenCart(product, size, color)}
                       />
                     ))}

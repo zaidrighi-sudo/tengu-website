@@ -19,9 +19,12 @@ import {
 export function ProductCard({
   product,
   onAdd,
+  index = 0,
 }: {
   product: Product
   onAdd: (size: Size, color: ColorName) => void
+  /** Position in a grid, used to stagger the entrance. */
+  index?: number
 }) {
   const [picking, setPicking] = useState(false)
   const [selectedColor, setSelectedColor] = useState<ColorName>(() => defaultColor(product))
@@ -75,6 +78,7 @@ export function ProductCard({
   return (
     <article
       className={cn("product-card", unavailable && "is-soldout", picking && "is-picking")}
+      style={{ "--i": index } as CSSProperties}
       data-pid={product.id}
       tabIndex={-1}
     >

@@ -11,11 +11,12 @@ import { lineKey, lineLimit, useCart } from "@/features/cart/CartContext"
 import type { Product, Size, ColorName } from "@/features/products/products"
 import { imagesForColor } from "@/features/products/variants"
 import { formatPrice } from "@/shared/utils/format"
+import { cn } from "@/shared/utils/cn"
 import { t, tr } from "@/shared/i18n"
 import { StoreImage } from "@/shared/components/StoreImage"
 
 export default function Cart() {
-  const { lines, count, subtotal, setQty, remove } = useCart()
+  const { lines, count, subtotal, setQty, remove, removing } = useCart()
   const heading = useRef<HTMLHeadingElement>(null)
   const [message, setMessage] = useState("")
 
@@ -56,7 +57,13 @@ export default function Cart() {
                 {lines.map(({ product, size, color, qty }) => {
                   const image = imagesForColor(product, color)[0]?.url || product.image
                   return (
-                    <li key={lineKey(product.id, size, color)} className="cart-page-line">
+                    <li
+                      key={lineKey(product.id, size, color)}
+                      className={cn(
+                        "cart-page-line",
+                        removing.includes(lineKey(product.id, size, color)) && "is-removing",
+                      )}
+                    >
                       <StoreImage className="photo" src={image} alt="" width={140} height={175} />
                       <div className="cart-page-info">
                         <h2>{tr(product.name)}</h2>

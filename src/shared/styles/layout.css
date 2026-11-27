@@ -118,6 +118,7 @@
 }
 
 .newsletter-success {
+  animation: success-in 0.45s var(--ease-out);
   border: 1px solid var(--color-white);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-label);

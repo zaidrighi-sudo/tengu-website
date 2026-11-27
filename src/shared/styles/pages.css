@@ -721,6 +721,7 @@
 }
 
 .contact-sent {
+  animation: success-in 0.45s var(--ease-out);
   align-content: start;
   background: var(--color-gray-950);
   border: 1px solid var(--color-border);

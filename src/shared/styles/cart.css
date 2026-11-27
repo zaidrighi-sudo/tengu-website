@@ -550,3 +550,18 @@
     top: calc(var(--header-h) + var(--space-5));
   }
 }
+
+/* ---------- Line removal ---------- */
+/* The row fades out before CartContext drops it, so the list does not jump. */
+.cart-line.is-removing,
+.cart-page-line.is-removing {
+  animation: line-out 0.24s var(--ease-out) forwards;
+  pointer-events: none;
+}
+
+@keyframes line-out {
+  to {
+    opacity: 0;
+    transform: translateX(0.6rem);
+  }
+}

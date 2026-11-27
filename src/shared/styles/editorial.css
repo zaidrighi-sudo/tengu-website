@@ -487,6 +487,7 @@
 }
 
 .signup-done {
+  animation: success-in 0.45s var(--ease-out);
   border-top: 3px solid var(--color-black);
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 5vw, 3.5rem);

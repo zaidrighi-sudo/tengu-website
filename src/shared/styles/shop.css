@@ -869,3 +869,19 @@
     display: none;
   }
 }
+
+/* ---------- Grid entrance ---------- */
+/* Cards arrive in sequence when filters change or more pieces load. */
+@media (prefers-reduced-motion: no-preference) {
+  .shop-grid > .product-card {
+    animation: card-in 0.45s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 35ms);
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
