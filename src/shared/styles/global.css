@@ -408,4 +408,35 @@
   width: 1px;
 }
 
+/* ---------- Motion polish ---------- */
+
+/* Route changes fade instead of snapping. Opacity only: a transform here
+   would become the containing block for the fixed header and cart drawer. */
+.page-enter {
+  animation: page-fade 0.28s var(--ease-out);
+}
+
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Photos fade in once their pixels arrive (see StoreImage). The keyframes have
+   no end state, so the fade settles on the photo's own opacity: sold-out cards
+   keep their dimmed look and hover photos stay hidden. */
+.store-img.is-pending {
+  opacity: 0;
+}
+
+.store-img.is-in {
+  animation: store-img-in 0.5s var(--ease-out);
+}
+
+@keyframes store-img-in {
+  from {
+    opacity: 0;
+  }
+}
+
 /* Tengu — storefront styles: tailwind base, design tokens, then feature styles. */

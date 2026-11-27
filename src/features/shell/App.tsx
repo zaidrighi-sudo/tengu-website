@@ -155,7 +155,10 @@ export default function App({ user }: { user: User | null }) {
         <CartProvider>
           {/* Remount on language change so every string re-reads the dictionary. */}
           <Fragment key={lang}>
-            <Page />
+            {/* Keyed so each route replays the fade-in on navigation. */}
+            <div key={route} className="page-enter">
+              <Page />
+            </div>
           </Fragment>
         </CartProvider>
       </WishlistProvider>

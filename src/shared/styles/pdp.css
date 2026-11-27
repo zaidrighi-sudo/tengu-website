@@ -436,3 +436,15 @@
   color: var(--color-gray-800);
   opacity: 0.5;
 }
+
+/* ---------- Lead photo swaps ---------- */
+/* Thumbnail / colourway changes crossfade instead of snapping. */
+.pdp-hero-img.is-swapping {
+  animation: pdp-photo-in 0.45s var(--ease-out);
+}
+
+@keyframes pdp-photo-in {
+  from {
+    opacity: 0.2;
+  }
+}

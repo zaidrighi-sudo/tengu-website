@@ -1,6 +1,6 @@
 "use client"
 
-import { type CSSProperties, useMemo, useRef, useState } from "react"
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react"
 import { CartProvider, useCart } from "@/features/cart/CartContext"
 import { type StoreData, hydrateStore } from "@/features/site-settings/data"
 import { type Product, type Size, isNewIn } from "@/features/products/products"
@@ -57,6 +57,13 @@ function Detail({ product }: { product: Product }) {
   )
   const [photo, setPhoto] = useState(0)
 
+  // The first lead photo is the LCP element: skip its crossfade so it paints
+  // at full opacity, and animate only when the user swaps photo or colour.
+  const firstHero = useRef(true)
+  useEffect(() => {
+    firstHero.current = false
+  }, [])
+
   const gallery = useMemo(() => imagesForColor(product, color), [product, color])
   const activePhoto = Math.min(photo, Math.max(0, gallery.length - 1))
   const hero = gallery[activePhoto] ?? { url: product.image, color }
@@ -95,9 +102,10 @@ function Detail({ product }: { product: Product }) {
       <div className="pdp-gallery">
         <div className="pdp-hero">
           <StoreImage
+            key={hero.url || product.image}
             src={hero.url || product.image}
             alt={color ? `${product.name} in ${color}` : product.name}
-            className="pdp-hero-img"
+            className={cn("pdp-hero-img", !firstHero.current && "is-swapping")}
             width={900}
             height={1125}
             priority
